@@ -1,0 +1,63 @@
+{% extends 'back-base.html' %}
+{% load static %}
+
+{% block title %}Services List{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Services List</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Services List
+                    <a href="{% url 'pages:service-add' %}" class="btn btn-success btn-sm ms-3">Add New Service</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.is_staff or request.user.is_superuser %}
+        <div class="row">
+            <div class="col-12">
+                {% include 'includes/alerts.html' %}
+                <div class="card">
+                    <div class="card-body">
+                        <table id="scroll-horizontal-datatable" class="table w-100 nowrap">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Service</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for service in services %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td><a href="{% url 'pages:service-edit' service.id %}"> {{ service.title | title }}</a></td>
+                                    <td>{{ service.description | truncatewords:"10" }}</td>
+                                    <td>{% if service.is_active %}
+                                            <span class="badge badge-success-lighten p-1 font-14">Active</span>
+                                        {% else %}
+                                            <span class="badge badge-warnig-lighten p-1 font-14">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+    {% endif %}
+
+{% endblock content %}

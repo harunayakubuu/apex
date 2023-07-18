@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}{% endblock title %} | Apex</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Apex" name="Properties" />
+        <meta content="integralsolutions.com" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}">
+
+        <!-- third party css -->
+        <link href="{% static 'backend/css/vendor/jquery-jvectormap-1.2.2.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'backend/css/vendor/dataTables.bootstrap5.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'backend/css/vendor/responsive.bootstrap5.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'backend/css/vendor/buttons.bootstrap5.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'backend/css/vendor/select.bootstrap5.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'backend/css/vendor/fixedHeader.bootstrap5.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'backend/css/vendor/fixedColumns.bootstrap5.css' %}" rel="stylesheet" type="text/css" />
+
+        <!-- App css -->
+        <link href="{% static 'backend/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'backend/css/app.min.css' %}" rel="stylesheet" type="text/css" id="app-style"/>
+        
+        <link href="{% static 'backend/assets/css/app-dark.min.css' %}" rel="stylesheet" type="text/css" id="dark-style" />
+
+        <style>
+            .htmx-indicator{
+                display: none;
+            }
+
+            .htmx-request .htmx-indicator{
+                display: inline;
+            }
+
+            
+            .htmx-inverted-indicator{
+                display: inline;
+            }
+
+            .htmx-request .htmx-inverted-indicator{
+                display: none;
+            }
+        </style>
+    </head>
+
+    <body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid" data-rightbar-onstart="true">
+        <!-- Begin page -->
+        <div class="wrapper">
+            {% include 'includes/backend/side-bar.html' %}
+            <div class="content-page">
+                <div class="content">
+                    <!-- Topbar Start -->
+                    {% include 'includes/backend/top-bar.html' %}
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+                        {{ redirect_to_login_immediately }}
+                        {% block content %}
+
+                        {% endblock content %}
+                    </div>
+                </div>
+   
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <script>document.write(new Date().getFullYear())</script> &copy; Apex Properties. All rights reserved.
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-end footer-links d-none d-md-block">                                    
+                                    Powered by <a href="#">Integral Solutions</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+
+        </div>
+
+        <!-- <div class="rightbar-overlay"></div> -->
+        <!-- /End-bar -->
+
+        <script>
+            var sessionEnd = {{ seconds_until_session_end }};
+            var idleEnd = {{ seconds_until_idle_end }};
+        </script>
+
+
+        <!-- HTMX -->
+        <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+        <script src="{% static 'htmx.min.js' %}"></script>
+        
+        <!-- bundle -->
+        <script src="{% static 'backend/js/vendor.min.js' %}"></script>
+        <script src="{% static 'backend/js/app.min.js' %}"></script>
+
+        <!-- third party js -->
+        <script src="{% static 'backend/js/vendor/apexcharts.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/jquery-jvectormap-1.2.2.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/jquery-jvectormap-world-mill-en.js' %}"></script>
+
+        <script src="{% static 'backend/js/vendor/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/dataTables.bootstrap5.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/responsive.bootstrap5.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/dataTables.buttons.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/buttons.bootstrap5.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/buttons.html5.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/buttons.flash.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/buttons.print.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/dataTables.keyTable.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/dataTables.select.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/fixedColumns.bootstrap5.min.js' %}"></script>
+        <script src="{% static 'backend/js/vendor/fixedHeader.bootstrap5.min.js' %}"></script>
+        <!-- third party js ends -->
+
+        <script src="{% static 'backend/js/pages/demo.datatable-init.js' %}"></script>
+
+        <script src="{% static 'backend/js/pages/demo.project-detail.js' %}"></script>
+
+        <script src="{% static 'backend/js/pages/demo.project-detail.js' %}"></script>
+
+        <script src="{% static 'backend/js/vendor/dropzone.min.js' %}"></script>
+        <!-- init js -->
+        <script src="{% static 'backend/js/ui/component.fileupload.js' %}"></script>
+
+        <!-- demo app -->
+        <script src="{% static 'backend/js/pages/demo.dashboard.js' %}"></script>
+
+        <script src="{% static 'backend/js/vendor/chart.min.js' %}"></script>
+ 
+        <script src="{% static 'backend/js/pages/demo.profile.js' %}"></script>
+
+    </body>
+</html>

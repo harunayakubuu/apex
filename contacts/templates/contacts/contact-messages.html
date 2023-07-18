@@ -1,0 +1,73 @@
+{% extends 'back-base.html' %}
+{% load static %}
+
+{% block title %}Contact Messages{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Contact Messages</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Contact Messages</h4>
+            </div>
+        </div>
+    </div>
+    
+    {% if request.user.is_superuser or request.user.is_staff %}
+        <div class="row">
+            <div class="col-12">
+                {% include 'includes/alerts.html' %}
+                {% if contact_messages %}
+                <div class="card">
+                    <div class="card-body">
+                        <table id="scroll-horizontal-datatable" class="table w-100 nowrap">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Subject</th>
+                                    <th>Message</th>
+                                    <th>Date Recieved</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for message in contact_messages %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td><a href="{{ message.get_message_details }}"> {{ message.name | title }}</a></td>
+                                    <td>{{ message.phone }}</td>
+                                    <td>{{ message.email }}</td>
+                                    <td>{{ message.subject }}</td>
+                                    <td>{{ message.message|truncatewords:'3'}}</td>
+                                    <td>{{ message.created_at }}</td>
+                                    <td><span
+                                        {% if message.status == 'attended' %} class="badge badge-success-lighten"
+                                        {% elif message.status == 'pending' %} class="badge badge-warning-lighten"
+                                        {% elif message.status == 'ignored' %} class="badge badge-danger-lighten"
+                                        {% endif %}>{{ message.status | title}}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {% else %}
+                    <p>No contact messages</p>
+                {% endif %}
+
+            </div>
+        </div>
+    {% else %}
+        <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+    {% endif %}
+{% endblock content %}

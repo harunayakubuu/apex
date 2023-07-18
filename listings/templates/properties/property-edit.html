@@ -1,0 +1,268 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit {{ instance.name }}{% endblock title %}
+
+{% block content %}
+
+<!-- <style>
+    .spec-form {
+        border-bottom:solid black 2px;
+    }
+
+    .hidden{
+        display: none;
+    }
+</style> -->
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'listings:listings-list' %}">Properties</a></li>
+                        <li class="breadcrumb-item active">Edit {{ instance.name }}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Edit {{ instance.name }}</h4>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="row">
+        <div class="col-12">
+            {% include 'includes/backend/terms-modal.html' %}
+            
+            {% include 'includes/alerts.html' %}
+            
+            {% if request.user.is_authenticated %}
+                {% if request.user.is_client or request.user.is_organisor %}
+                    {% if request.user.client %}
+                        <div class="card">
+                            <div class="card-body">
+                                {% if not instance.is_locked %}
+                                <form method="post" novalidate>{% csrf_token %}{{ form.media }}
+                                    {% if request.user.is_organisor %}
+                                    <div class="row">
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.listing_agent|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <div class="row">
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.name|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.category|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.listing_type|as_crispy_field }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.price|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.price_status|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.status|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.address|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.location|as_crispy_field }}
+                                            </div>
+                                        </div>                            
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.city|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.state|as_crispy_field }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
+                                            <div class="mb-3">{{ form.length|as_crispy_field }}</div>
+                                        </div>
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
+                                            <div class="mb-3">{{ form.breadth|as_crispy_field }}</div>
+                                        </div>
+                                       
+                                                                
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.description|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+
+                                    <p>{{ form.withdraw | as_crispy_field }}.</p>
+
+                                    <input type="submit" value="Save Changes" class="btn btn-info">
+                                    
+                                </form>
+                                {% else %}
+                                    This property is locked!. <br><br>
+                                    
+                                    <p>Reason(s):  {{ instance.locked_reason }}.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <h4>You have not updated your profile. Kindly <a href="{% url 'clients:client-create' %}">update</a> your profile to be able to submit properties. </h4>
+                    {% endif %}
+                
+                {% elif request.user.is_agent %}
+
+                    <div class="card">
+                            <div class="card-body">
+                                {% if not instance.is_locked %}
+                                <form method="post" novalidate>{% csrf_token %}{{ form.media }}
+                                    <div class="row">
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.name|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.category|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.listing_type|as_crispy_field }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.price|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.price_status|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.status|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.address|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.location|as_crispy_field }}
+                                            </div>
+                                        </div>                            
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.city|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.state|as_crispy_field }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
+                                            <div class="mb-3">{{ form.length|as_crispy_field }}</div>
+                                        </div>
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
+                                            <div class="mb-3">{{ form.breadth|as_crispy_field }}</div>
+                                        </div>
+                                       
+                                                                
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ form.description|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+
+                                    <input type="submit" value="Save Changes" class="btn btn-info">
+                                    
+                                </form>
+                                {% else %}
+                                    This property is locked!. <br><br>
+                                    
+                                    <p>Reason(s):  {{ instance.locked_reason }}.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                
+                {% else %}
+                    <h4>You are not eligible to submit properties with this account. <a href="{% url 'contacts:contact-form' %}"> Contact us</a> for more</h4>
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+
+    <!-- <script>
+                
+        document.addEventListener('click', (event)=>{
+            if (event.target.id == 'add-more'){
+                add_new_form(event)
+            }
+        })
+
+        function add_new_form(event){
+            if (event){
+                event.preventDefault();
+            }
+        const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+        const currentSpecForms = document.getElementsByClassName('spec-form')
+        const currentFormCount = currentSpecForms.length // + 1
+
+        const formCopyTarget = document.getElementById('spec-form-list')
+        const copyEmptyFormElement = document.getElementById('empty-form').cloneNode(true)
+        copyEmptyFormElement.setAttribute('class', 'spec-form')
+        copyEmptyFormElement.setAttribute('id', `form-${currentFormCount}`)
+
+        const regex = new RegExp('__prefix__', 'g')
+        copyEmptyFormElement.innerHTML = copyEmptyFormElement.innerHTML.replace(regex, currentFormCount)
+        totalNewForms.setAttribute('value', currentFormCount + 1)
+
+        formCopyTarget.append(copyEmptyFormElement)
+
+        }
+    </script> -->

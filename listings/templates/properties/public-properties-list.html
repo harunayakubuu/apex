@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+{% block title %}Property List{% endblock title %}
+
+{% block content %}
+
+	<div class="page-title">
+		<div class="container">
+			<div class="col-lg-12 col-md-12">
+				<h2 class="ipt-title">Properties</h2>
+				<span class="ipn-subtitle">List of properties</span>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-lg-10 col-md-12">
+					
+					<!--<div class="full-search-2 eclip-search italian-search hero-search-radius shadow-hard">
+						<div class="hero-search-content">
+							<div class="row">
+							
+								<div class="col-lg-4 col-md-4 col-sm-12 b-r">
+									<div class="form-group">
+										<div class="choose-propert-type">
+											<ul>
+												<li>
+													<input id="cp-1" class="checkbox-custom" name="cpt" type="radio" checked>
+													<label for="cp-1" class="checkbox-custom-label">Buy</label>
+												</li>
+												<li>
+													<input id="cp-2" class="checkbox-custom" name="cpt" type="radio">
+													<label for="cp-2" class="checkbox-custom-label">Rent</label>
+												</li>
+												<li>
+													<input id="cp-3" class="checkbox-custom" name="cpt" type="radio">
+													<label for="cp-3" class="checkbox-custom-label">Sold</label>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-lg-6 col-md-5 col-sm-12 p-0 elio">
+									<div class="form-group">
+										<div class="input-with-icon">
+											<input type="text" class="form-control" placeholder="Search for a location">
+											<img src="assets/img/pin.svg" width="20"></i>
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-lg-2 col-md-3 col-sm-12">
+									<div class="form-group">
+										<a href="#" class="btn search-btn black">Search</a>
+									</div>
+								</div>
+										
+							</div>
+						</div>
+					</div>-->
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<section class="gray-simple">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				<div class="property_block_wrap style-2">
+					<div class="property_block_wrap_header">
+						<a data-bs-toggle="collapse" data-parent="#features" data-bs-target="#clOne" aria-controls="clOne" href="javascript:void(0);" aria-expanded="false"><h4 class="property_block_title">Properties by state ({{ states_count }})</h4></a>
+					</div>
+					<div id="clOne" class="panel-collapse collapse show" aria-labelledby="clOne" aria-expanded="true">
+						<div class="block-body">
+							<ul class="deatil_features">
+								{% for key, value in s %}
+									<li><strong><a href="{% url 'listings:public-properties-by-state' key %}">{{ key }}:</strong>{{ value }} Properties</a></li>
+								{% endfor %}
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+	
+	<section>
+		<div class="container">
+			<!--
+			<div class="row justify-content-center">
+				<div class="col-lg-4 col-md-4">
+					
+					<div class="item-shorting-box">
+						<div class="item-shorting clearfix">
+							<div class="left-column pull-left"><h4 class="m-0">Found 142 Results</h4></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-8 col-md-8 align-items-right">
+					<div class="item-shorting-box-right">
+						<ul class="shorting-list">
+						<form method="GET">
+							{# listing_filter.form #}
+							<input type="submit" class="btn btn-primary btn-sm">						
+						</form>
+						</ul>
+					</div>
+				</div>
+			</div>
+			-->
+			
+			{% if page_obj %}
+			<div class="row">
+
+				{% for listing in page_obj %}
+				<div class="col-lg-4 col-md-6 col-sm-12">
+
+					<div class="single-items">
+						<div class="property-listing shadow-none property-2 border">
+					
+							<div class="listing-img-wrapper">
+								
+								<div class="list-img-slide">									
+									{% if listing.listingpicture_set.all %}
+									<div class="click">
+										{% for pic in listing.listingpicture_set.all %}
+										<div>
+										<a href="{{ listing.get_absolute_url }}">
+											<img src="{{ pic.picture.url }}" class="img-fluid mx-auto" width="1200px" height="800" alt="" />
+										</a>
+										</div>
+										{% endfor %} 
+									</div>
+									{% else %}
+										<a href="{{ listing.get_absolute_url }}">
+											<img src="{% static 'assets/img/grid/no-image.jpg' %}" class="img-fluid mx-auto" alt="" /></a>
+										</a>
+									{% endif %}
+								</div>
+								
+							</div>
+							
+							<div class="listing-detail-wrapper">
+								<div class="listing-short-detail">
+									<div class="row">
+										<div class="col-6">
+											Category: <span class="badge badge-md bg-primary">{{ listing.category }}</span>
+										</div>
+										<div class="col-6">
+											Type: <span class="badge badge-md bg-info">{{ listing.listing_type }} </span>
+										</div>
+									</div>
+
+									<hr />
+									
+									<div class="listing-short-detail">
+										<h5 class="verified">
+											<a href="{{ listing.get_absolute_url }}" class="prt-link-detail">{{ listing.name }} </a>
+
+											{% if listing.status == 'sale' %}
+												<span class="prt-types sale">For {{ listing.status | title }}</span>
+											{% endif %}
+											{% if listing.status == 'rent' %}
+												<span class="prt-types rent">For {{ listing.status | title }}</span>
+											{% endif %}
+										</h5>
+									</div>
+									
+									<div class="listing-short-detail-flex">
+										<h6 class="prt-price-fix">
+											&#8358;{% if listing.price < 1000000 %}
+												{{ listing.price|intcomma }}
+											{% else %}
+												{{ listing.price|intword }}
+											{% endif %}
+											{% if listing.status == 'rent' %}<sub>/year</sub>{% endif %}
+
+											<span class="badge badge-sm {% if listing.price_status == 'fixed' %} bg-danger {% else %} bg-success {% endif %}" style="color: whitesmoke;">
+												{{ listing.price_status|upper }}
+											</span>
+										</h6>
+									</div>
+
+								</div>
+							</div>
+							
+							<div class="price-features-wrapper">
+								<div class="list-fx-features">
+									{% if listing.listingspecification_set.all %}
+										{% for s in listing.listingspecification_set.all %}
+											{% if s.attribute.name == 'Bedroom' %}
+												<div class="listing-card-info-icon">
+													<div class="inc-fleat-icon"><img src="{% static 'assets/img/bed.svg' %}" width="13" alt="" /></div>{{ s.value }} Beds
+												</div>
+											{% endif %}
+											{% if s.attribute.name == 'Bathroom' %}
+												<div class="listing-card-info-icon">
+													<div class="inc-fleat-icon"><img src="{% static 'assets/img/bathtub.svg' %}" width="13" alt="" /></div>{{ s.value }} Bath
+												</div>
+											{% endif %}
+										{% endfor %}
+									{% endif %}
+									<div class="listing-card-info-icon">
+										<div class="inc-fleat-icon"><img src="{% static 'assets/img/move.svg' %}" width="13" alt="" /></div>{# listing.get_sqft #}{{ listing.length }} by {{ listing.breadth }} ft
+									</div>
+								</div>
+							</div>
+							
+							<div class="listing-detail-footer">
+								<div class="footer-first">
+									<div class="foot-location"><img src="{% static 'assets/img/pin.svg' %}" width="18" alt="" />{{ listing.location }}, {{ listing.state }}.</div>
+								</div>
+								<div class="footer-flex">
+									<a href="{{ listing.get_absolute_url }}" class="prt-view">View</a>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					
+				</div>
+				{% endfor %}	
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					{% if page_obj.has_other_pages %}
+						<ul class="pagination p-center">
+							{% if page_obj.has_previous %}
+								<li class="page-item">
+									<a class="page-link" href="?page=1" aria-label="Previous">
+										<!--<span class="ti-arrow-left"></span>-->
+										<span> &#8810; </span>
+									</a>
+									<a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+										<!--<span class="ti-arrow-left"></span>-->
+										<span class=""> &lt; </span>
+									</a>
+								</li>
+							{% endif %}
+								
+							<li class="page-item"><span style="width:150px">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span></li>
+								
+							{% if page_obj.has_next %}
+								<li class="page-item">
+									<a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+										<span> &#62; </span>
+										<!--<span class="sr-only">Next</span>-->
+									</a>
+									<a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+										<!--<span class="ti-arrow-right"></span>-->
+										<span> &#8811; </span>
+									</a>
+								</li>
+							{% endif %}
+						</ul>
+					{% endif %}
+				</div>
+			</div>
+
+			{% else %}
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <p>
+                            <h3>No properties available.</h3>
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+			
+			<!-- Pagination -->
+			<!--<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 text-center">
+					<a href="listings-list-with-sidebar.html" class="btn btn-theme-light-2 rounded">Browse More Properties</a>
+				</div>
+			</div>-->
+		</div>		
+	</section>
+			
+{% endblock content %}

@@ -1,0 +1,121 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Agent {{ agent.user.username }} {% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'agents:agency-agents-list' %}">Agents</a></li>
+                        <li class="breadcrumb-item active">{{ agent.user.username }}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{{ agent.user.username }}</h4>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.is_organisor %}
+        <div class="row">
+            <div class="col-lg-12 col-md-6 col-xxl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>{{ agent.user.username }} </h4>
+                        <p>
+                            Username: {{ agent.user.username }}<br>
+                            Name: {{ agent.user.get_full_name }}<br>
+                            Status: {% if agent.user.is_active %} Active {% else %} Not active {% endif %}<br>
+                            Email: {{ agent.user.email }}<br>
+                            Phone: {{ agent.user.phone_number }}<br>
+                            Date Joined: {{ agent.user.date_joined | date }}<br>
+                            Last Login: {{ agent.user.last_login | date }}
+                        </p>                        
+                        <a href="{% url 'agents:agency-agent-user-update' agent.user.id %}" class="btn btn-sm btn-success"><i class="mdi mdi-pencil me-1"></i> Edit Permission</a>
+                        <a href="{% url 'agents:agency-agent-user-delete' agent.user.pk %}" class="btn btn-sm btn-danger ms-2"><i class="mdi mdi-delete me-1"></i> Delete Agent</a>
+                        <!--<a href="{# url 'agents:private-agent-delete' agent.pk #}" class="btn btn-btn-sm btn-danger">Delete</a>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">        
+            <h5 class="mt-0 task-header">
+                Properties Assigned to
+                {% if agent.user.get_full_name %}
+                    {{ agent.user.get_full_name }}
+                {% else %}
+                    {{ agent.user.username }}
+                {% endif %} (3)
+            </h5>
+                        
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="card mb-0">
+                    <div class="card-body p-3">
+                        <small class="float-end text-muted">18 Jul 2018</small>
+                        <span class="badge bg-danger">High</span>
+                        <h5 class="mt-2 mb-2">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#task-detail-modal" class="text-body">iOS App home page</a>
+                        </h5>
+                        <p class="mb-0">
+                            <span class="pe-2 text-nowrap mb-2 d-inline-block">
+                                <i class="mdi mdi-briefcase-outline text-muted"></i>
+                                iOS
+                            </span>
+                            <span class="text-nowrap mb-2 d-inline-block">
+                                <i class="mdi mdi-comment-multiple-outline text-muted"></i>
+                                <b>74</b> Comments
+                            </span>
+                        </p>
+                        <div class="dropdown float-end">
+                            <a href="#" class="dropdown-toggle text-muted arrow-none" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="mdi mdi-dots-vertical font-18"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="#" class="dropdown-item"><i class="mdi mdi-exit-to-app me-1"></i>Detail</a>
+                                <a href="#" class="dropdown-item"><i class="mdi mdi-pencil me-1"></i>Edit</a>
+                                <a href="#" class="dropdown-item"><i class="mdi mdi-delete me-1"></i>Delete</a>
+                                <a href="#" class="dropdown-item"><i class="mdi mdi-plus-circle-outline me-1"></i>Assign Agent</a>
+                                
+                            </div>
+                        </div>
+
+                        <p class="mb-0">
+                            <img src="assets/images/users/avatar-2.jpg" alt="user-img" class="avatar-xs rounded-circle me-1" />
+                            <span class="align-middle">Robert Carlile</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-6 col-xxl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Properties Assigned to
+                            {% if agent.user.get_full_name %}
+                                {{ agent.user.get_full_name }}
+                            {% else %}
+                                {{ agent.user.username }}
+                            {% endif %}
+                        </h4>
+                        <hr>                        
+                        <p>
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+    {% endif %}
+
+{% endblock content %}

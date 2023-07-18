@@ -1,0 +1,70 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Additional Features{% endblock title %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                    <!-- <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li> -->
+                    <li class="breadcrumb-item active">Edit Additional Features for {{ listing.name | title }}</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Edit Additional Features for {{ listing.name | title }}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        {% include 'includes/alerts.html' %}
+        <div class="card">
+            <div class="card-body">
+
+                {% if request.user.is_authenticated %}
+                    {% if request.user.client %}
+                        {% if not listing.category.name == 'Land' %}
+                            {% if not listing.is_locked %}
+                                <h3>Add/Edit Additional Features for {{ listing.name | title }}</h3>
+                                <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                                    {{ formset.management_form }}
+                                    {% for form in formset %}
+                                    <div class="row">
+                                        <div class="col-lg-12 mb-3">
+                                            {{ form.feature|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    <button type="submit" class="btn btn-success mt-2">Save</button>
+                                </form>
+                            {% else %}
+                                Locked!
+                            {% endif %}
+                        {% else %}
+                            <p style="font-size: medium;">
+                                Sorry, additional features cannot be added to this property (<strong>{{ listing.name|title }}</strong>), its category is {{ listing.category.name | title }}.
+                            </p>
+                        {% endif %}
+                    
+                    {% else %}
+                        <p style="font-size: medium;">
+                            You do not have the permission to edit this property.
+                        </p>
+                    {% endif %}
+                {% else %}
+                    <p style="font-size: medium;">
+                        You are not logged in. Would you like to <a href="{% url 'accounts:account-login' %}">login</a>?
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

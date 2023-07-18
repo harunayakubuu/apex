@@ -1,0 +1,60 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ agency }}'s Properties{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+
+                        <li class="breadcrumb-item active">{{ agency }}'s Properties </li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{{ agency }}'s Properties
+                </h4>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        {% if request.user.is_authenticated %}
+            <div class="col-12">
+                {% include 'includes/alerts.html' %}
+            
+                {% if request.user.is_organisor %}
+                    
+                        <div class="card">
+                            <div class="card-body">
+
+                                <h3>{{ agency }}'s Properties</h3>
+                                <hr>
+
+                                {% for agent in agents %}
+                                <div class="card mb-1 shadow-none border">
+                                    <div class="p-2">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <a href="{% url 'agents:agency-agent-details' agent.id %}" class="btn btn-link text-muted">
+                                                    {{ agent }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                    This agency has no properties records.
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <h4>You do not have the permission to this page</h4>
+                    {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

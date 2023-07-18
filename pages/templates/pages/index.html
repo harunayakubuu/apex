@@ -1,0 +1,961 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+
+    <div class="image-bottom hero-banner" style="background:#2540a2 url({% static 'assets/img/banner-01.jpg' %}) no-repeat;" data-overlay="0" width="1900px" height="900px">
+	
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-9 col-md-11 col-sm-12">
+				<div class="inner-banner-text text-center">
+					<p class="lead-1" style="font-size:30px; font-type:consolas">We are changing the Real estate industry with progression and passion</p>
+					<h2><span class="font-normal">Find Your</span> Perfect Home <span class="font-normal">in {{ locations_count }}+ Locations</span></h2>
+				</div>
+				
+				<!--
+				{# if active_listings #}
+					{# include "includes/search-form.html" #}
+				{# endif #}
+				-->
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="home-map-banner full-wrapious mt-3">	
+	<div class="row">
+		<div class="col-lg-12 col-md-12">
+			<div class="sec-heading center">
+				<h2>Our Properties Locations</h2>
+				<p>The Locations We Cover</p>
+			</div>
+		</div>
+	</div>
+	<div class="hm-map-container fw-map">
+		<div>
+			{{ map|safe }}
+		</div>
+	</div>
+	
+	<!-- Advance Search -->
+	<!--
+	<div class="advance-search-container">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<button data-bs-toggle="collapse" data-bs-target="#ad-search" class="btn adv-btn">Advance Search</button>
+
+					<div id="ad-search" class="collapse">
+						<div class="map-search-box">
+				
+							<div class="full-search-2 eclip-search italian-search hero-search-radius shadow-hard">
+								<div class="hero-search-content">
+									<div class="row">
+									
+										<div class="col-lg-4 col-md-4 col-sm-12 b-r">
+											<div class="form-group">
+												<div class="choose-propert-type">
+													<ul>
+														<li>
+															<input id="cp-1" class="checkbox-custom" name="cpt" type="radio" checked>
+															<label for="cp-1" class="checkbox-custom-label">Buy</label>
+														</li>
+														<li>
+															<input id="cp-2" class="checkbox-custom" name="cpt" type="radio">
+															<label for="cp-2" class="checkbox-custom-label">Rent</label>
+														</li>
+														<li>
+															<input id="cp-3" class="checkbox-custom" name="cpt" type="radio">
+															<label for="cp-3" class="checkbox-custom-label">Sold</label>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-5 col-sm-12 p-0 elio">
+											<div class="form-group">
+												<div class="input-with-icon">
+													<input type="text" class="form-control" placeholder="Search for a location">
+													<img src="assets/img/pin.svg" width="20"></i>
+												</div>
+											</div>
+										</div>
+										
+										<div class="col-lg-2 col-md-3 col-sm-12">
+											<div class="form-group">
+												<a href="#" class="btn search-btn black">Search</a>
+											</div>
+										</div>
+												
+									</div>
+								</div>
+							</div>
+							
+						</div>
+			
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	-->
+</div>
+
+<section class="gray-simple">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				<div class="property_block_wrap style-2">
+					<div class="property_block_wrap_header">
+						<a data-bs-toggle="collapse" data-parent="#features" data-bs-target="#clOne" aria-controls="clOne" href="javascript:void(0);" aria-expanded="false"><h4 class="property_block_title">Properties by state ({{ states_count }})</h4></a>
+					</div>
+					<div id="clOne" class="panel-collapse collapse show" aria-labelledby="clOne" aria-expanded="true">
+						<div class="block-body">
+							<ul class="deatil_features">
+								{% for key, value in s %}
+									<li><strong><a href="{% url 'listings:public-properties-by-state' key %}">{{ key }}</strong>{{ value }} Properties</a></li>
+								{% endfor %}
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<!--
+<section>
+    <div class="container">
+        <div class="row">
+          <div class="section-title text-center">
+            <h2 class="blink_me">Dummy Content</h2>
+            <p>Find your dream homes &amp; Lands</p>
+          </div>
+          <div class="col-lg-3 col-sm-6 mb-4">
+            <div class="bg-light p-4 py-5 text-center">
+              <i class="flaticon-agent font-xlll text-primary mb-4"></i>
+              <h5 class="mb-3">A shopper reaches out</h5>
+              <p class="mb-0">The price is something not necessarily defined as financial. It could be time.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-6 mb-4">
+            <div class="bg-light p-4 py-5 text-center">
+              <i class="flaticon-like font-xlll text-primary mb-4"></i>
+              <h5 class="mb-3">We verify the lead</h5>
+              <p class="mb-0">This is perhaps the single biggest obstacle that all of us must overcome.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-6 mb-4">
+            <div class="bg-light p-4 py-5 text-center">
+              <i class="flaticon-room-key-1 font-xlll text-primary mb-4"></i>
+              <h5 class="mb-3">You connect live</h5>
+              <p class="mb-0">One of the main areas that I work on with my clients is shedding these.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <div class="bg-light p-4 py-5 text-center">
+              <i class="flaticon-house-key-1 font-xlll text-primary mb-4"></i>
+              <h5 class="mb-3">Convert more deals</h5>
+              <p class="mb-0">It is truly amazing the damage that we, as parents, can inflict on our children</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+	-->
+
+
+	<section class="mb-3">
+		<div class="container">
+			<div class="border">
+			<!--<div class="row justify-content-center">
+				<div class="col-lg-7 col-md-10 text-center">
+					<div class="sec-heading center mb-4">
+						<h2>Achievement</h2>
+						<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores</p>
+					</div>
+				</div>
+			</div>-->
+			
+				<div class="row">
+					<div class="col-lg-3 col-md-3 col-sm-6">
+						<div class="achievement-wrap">
+							<div class="achievement-content">
+								<h4>{{ locations_count }}+</h4>
+								<p>Locations Covered</p>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-lg-3 col-md-3 col-sm-6">
+						<div class="achievement-wrap">
+							<div class="achievement-content">
+								<h4>{{ listing_sale_count }}+</h4>
+								<p>Properties For Sales</p>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-lg-3 col-md-3 col-sm-6">
+						<div class="achievement-wrap">
+							<div class="achievement-content">
+								<h4>{{ listing_rent_count }}+</h4>
+								<p>Properties For Rent</p>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-lg-3 col-md-3 col-sm-6">
+						<div class="achievement-wrap">
+							<div class="achievement-content">
+								<h4>{{ agents_count }}+</h4>
+								<p>Active Agents</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<div class="clearfix"></div>
+
+
+	{% if featured_listings %}
+	<section class="pt-0">
+		<div class="container">	
+			<div class="row justify-content-center">
+				<div class="col-lg-7 col-md-10 text-center">
+					<div class="sec-heading center mb-4">
+						<h2>Featured Properties</h2>
+						<p>Recently Added Featured Properties</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					<div class="property-slide">
+						
+						{% for listing in featured_listings %}
+						<div class="single-items">
+							<div class="property-listing shadow-none property-2 border">
+					
+								<div class="listing-img-wrapper">
+									<div class="list-img-slide">
+										{% if listing.listingpicture_set.all %}
+										<div class="click">
+											{% for pic in listing.listingpicture_set.all %}
+											<div>
+												<a href="{{ listing.get_absolute_url }}">
+													<img src="{{ pic.picture.url }}" class="img-fluid mx-auto" width="1200px" height="800" alt="" />
+												</a>
+											</div>
+											{% endfor %} 
+										</div>
+										{% else %}
+											<a href="{{ listing.get_absolute_url }}">
+												<img src="{% static 'assets/img/grid/no-image.jpg' %}" class="img-fluid mx-auto" alt="" /></a>
+											</a>
+										{% endif %}
+									</div>
+								</div>
+								
+								<div class="listing-detail-wrapper">
+									<div class="listing-short-detail">
+										<div class="row">
+											<div class="col-6">
+												Category: <span class="badge badge-md bg-primary">{{ listing.category }}</span>
+											</div>
+											<div class="col-6">
+												Type: <span class="badge badge-md bg-info">{{ listing.listing_type }} </span>
+											</div>
+										</div>
+
+										<hr />
+
+										<div class="listing-short-detail">
+											<h5 class="verified">
+												<!--<div class="checkmark"></div>-->
+												<a href="{{ listing.get_absolute_url }}" class="prt-link-detail">{{ listing.name }}</a>
+
+												{% if listing.status == 'sale' %}
+													<span class="prt-types sale">For {{ listing.status | title }}</span>
+												{% endif %}
+												{% if listing.status == 'rent' %}
+													<span class="prt-types rent">For {{ listing.status | title }}</span>
+												{% endif %}
+											</h5>
+										</div>
+										<div class="listing-short-detail-flex">
+											<h6 class="prt-price-fix">
+												&#8358;{% if listing.price < 1000000 %}
+													{{ listing.price|intcomma }}
+												{% else %}
+													{{ listing.price|intword }}
+												{% endif %}
+												{% if listing.status == 'rent' %}<sub>/year</sub>{% endif %}
+
+												<span class="badge badge-sm {% if listing.price_status == 'fixed' %} bg-danger {% else %} bg-success {% endif %}" style="color: whitesmoke;">
+													{{ listing.price_status|upper }}
+												</span>
+											</h6>
+										</div>
+									</div>
+								</div>
+								
+								<div class="price-features-wrapper">
+									<div class="list-fx-features">
+										{% if listing.listingspecification_set.all %}
+											{% for s in listing.listingspecification_set.all %}
+												{% if s.attribute.name == 'Bedroom' %}
+													<div class="listing-card-info-icon">
+														<div class="inc-fleat-icon"><img src="{% static 'assets/img/bed.svg' %}" width="13" alt="" /></div>{{ s.value }} Beds
+													</div>
+												{% endif %}
+												{% if s.attribute.name == 'Bathroom' %}
+													<div class="listing-card-info-icon">
+														<div class="inc-fleat-icon"><img src="{% static 'assets/img/bathtub.svg' %}" width="13" alt="" /></div>{{ s.value }} Bath
+													</div>
+												{% endif %}
+											{% endfor %}
+										{% endif %}
+										<div class="listing-card-info-icon">
+											<div class="inc-fleat-icon"><img src="{% static 'assets/img/move.svg' %}" width="13" alt="" /></div>{{ listing.get_sqft }} sqft
+										</div>
+									</div>
+								</div>
+								
+								<div class="listing-detail-footer">
+									<div class="footer-first">
+										<div class="foot-location"><img src="{% static 'assets/img/pin.svg' %}" width="18" alt="" />{{ listing.location }}, {{ listing.state }}.</div>
+									</div>
+									<div class="footer-flex">
+										<a href="{{ listing.get_absolute_url }}" class="prt-view">View</a>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						{% endfor %}
+
+						
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 text-center">
+					<a href="{% url 'listings:public-properties-list' %}" class="btn btn-theme-light rounded">Browse All Properties</a>
+				</div>
+			</div>
+			
+		</div>
+	</section>
+	{% endif %}
+
+
+	<!--
+	{# if sale_featured_listings #}
+	<section class="bg-light">
+		<div class="container">
+		
+			<div class="row justify-content-center">
+				<div class="col-lg-7 col-md-10 text-center">
+					<div class="sec-heading center">
+						<h2>Featured Property For Sale</h2>
+						<p>Recently Added Featured Properties For Sale</p>
+					</div>
+				</div>
+			</div>
+		
+			<div class="row list-layout">
+				
+				{# for listing in sale_listings #}
+				<div class="col-lg-6 col-md-12">
+					<div class="property-listing property-1">
+							
+						<div class="listing-img-wrapper">
+							<a href="single-property-2.html">
+								<img src="https://via.placeholder.com/1200x800" class="img-fluid mx-auto" alt="" />
+							</a>
+						</div>
+						
+						<div class="listing-content">
+						
+							<div class="listing-detail-wrapper-box">
+								<div class="listing-detail-wrapper">
+									<div class="listing-short-detail">
+										<h4 class="listing-name"><a href="single-property-2.html">Black Oak Realty</a></h4>
+										<div class="fr-can-rating">
+											<i class="fas fa-star filled"></i>
+											<i class="fas fa-star filled"></i>
+											<i class="fas fa-star filled"></i>
+											<i class="fas fa-star filled"></i>
+											<i class="fas fa-star"></i>
+											<span class="reviews_text">(42 Reviews)</span>
+										</div>
+										<span class="prt-types rent">For Rent</span>
+									</div>
+									<div class="list-price">
+										<h6 class="listing-card-info-price">$8,400</h6>
+									</div>
+								</div>
+							</div>
+							
+							<div class="price-features-wrapper">
+								<div class="list-fx-features">
+									<div class="listing-card-info-icon">
+										<div class="inc-fleat-icon"><img src="assets/img/bed.svg" width="13" alt="" /></div>3 Beds
+									</div>
+									<div class="listing-card-info-icon">
+										<div class="inc-fleat-icon"><img src="assets/img/bathtub.svg" width="13" alt="" /></div>1 Bath
+									</div>
+									<div class="listing-card-info-icon">
+										<div class="inc-fleat-icon"><img src="assets/img/move.svg" width="13" alt="" /></div>800 sqft
+									</div>
+								</div>
+							</div>
+						
+							<div class="listing-footer-wrapper">
+								<div class="listing-locate">
+									<span class="listing-location"><i class="ti-location-pin"></i>Quice Market, Canada</span>
+								</div>
+								<div class="listing-detail-btn">
+									<a href="single-property-2.html" class="more-btn">View</a>
+								</div>
+							</div>
+							
+						</div>
+						
+					</div>
+				</div>
+				{# endfor #}
+
+			</div>
+					
+			
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 text-center">
+					<a href="{# url 'listings:public-properties-list' #}" class="btn btn-theme-light rounded">Browse All Properties</a>
+				</div>
+			</div>
+			
+		</div>		
+	</section>
+	{# endif #}
+	-->
+
+	
+	<section class="pt-0">
+		<div class="container">	
+			<div class="row justify-content-center">
+				<div class="col-lg-7 col-md-10 text-center">
+					<div class="sec-heading center mb-4">
+						<h2>Hot Deals</h2>
+						<!--<p>List of Our Best Deals of The Week</p>-->
+					</div>
+				</div>
+			</div>
+			
+			{% if offers %}
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					<div class="property-slide">
+						
+						{% for listing in offers %}
+						<div class="single-items">
+							<div class="property-listing shadow-none property-2 border">
+					
+								<div class="listing-img-wrapper">
+									<div class="list-img-slide">
+										{% if listing.listingpicture_set.all %}
+										<div class="click">
+											{% for pic in listing.listingpicture_set.all %}
+											<div>
+											<a href="{{ listing.get_absolute_url }}">
+													<img src="{{ pic.picture.url }}" class="img-fluid mx-auto" width="1200px" height="800" alt="" />
+												</a>
+											</div>
+											{% endfor %} 
+										</div>
+										{% else %}
+											<a href="{{ listing.get_absolute_url }}">
+												<img src="{% static 'assets/img/grid/no-image.jpg' %}" class="img-fluid mx-auto" alt="" /></a>
+											</a>
+										{% endif %}
+									</div>
+								</div>
+								
+								<div class="listing-detail-wrapper">
+									<div class="listing-short-detail">
+										<div class="row">
+											<div class="col-6">
+												Category: <span class="badge badge-md bg-primary">{{ listing.category }}</span>
+											</div>
+											<div class="col-6">
+												Type: <span class="badge badge-md bg-info">{{ listing.listing_type }} </span>
+											</div>
+										</div>
+
+										<hr />
+
+										<div class="listing-short-detail">
+											<h5 class="verified">
+												<!--<div class="checkmark"></div>-->
+												<a href="{{ listing.get_absolute_url }}" class="prt-link-detail">{{ listing.name }}</a>
+
+												{% if listing.status == 'sale' %}
+													<span class="prt-types sale">For {{ listing.status | title }}</span>
+												{% endif %}
+												{% if listing.status == 'rent' %}
+													<span class="prt-types rent">For {{ listing.status | title }}</span>
+												{% endif %}
+											</h5>
+										</div>
+										<div class="listing-short-detail-flex">
+											<h6 class="prt-price-fix">
+												&#8358;{% if listing.price < 1000000 %}
+													{{ listing.price|intcomma }}
+												{% else %}
+													{{ listing.price|intword }}
+												{% endif %}
+												{% if listing.status == 'rent' %}<sub>/year</sub>{% endif %}
+
+												<span class="badge badge-sm {% if listing.price_status == 'fixed' %} bg-danger {% else %} bg-success {% endif %}" style="color: whitesmoke;">
+													{{ listing.price_status|upper }}
+												</span>
+											</h6>
+										</div>
+
+										<div class="listing-short-detail-flex property-countdown">
+											<div id="offer-box">
+												{{ listing.discount_percentage_off }}% of the commission Off. <span>Offer Ends: {{ listing.discount_ends|date:"M d, Y H:m:s" }}</span>
+											</div>
+										
+											<div id="countdown-box">
+												<h5 class="mb-3 mt-3">Time left: </h5>
+												<!-- <div class="spinner-border" role="status"></div> -->
+												
+												<div class="countdown countdown-small">
+													<span class="theme-color" id="day-box"></span>
+													<p class="days_ref">days</p>
+												</div>
+												<div class="countdown countdown-small">
+													<span class="theme-color" id="hour-box"></span>
+													<p class="hours_ref">hours</p>
+												</div>
+												<div class="countdown countdown-small">
+													<span class="theme-color" id="minute-box"></span>
+													<p class="minutes_ref">minutes</p>
+												</div>
+												<div class="countdown countdown-small">
+													<span class="theme-color" id="second-box"></span>
+													<p class="seconds_ref">seconds</p>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="price-features-wrapper">
+									<div class="list-fx-features">
+										{% if listing.listingspecification_set.all %}
+											{% for s in listing.listingspecification_set.all %}
+												{% if s.attribute.name == 'Bedroom' %}
+													<div class="listing-card-info-icon">
+														<div class="inc-fleat-icon"><img src="{% static 'assets/img/bed.svg' %}" width="13" alt="" /></div>{{ s.value }} Beds
+													</div>
+												{% endif %}
+												{% if s.attribute.name == 'Bathroom' %}
+													<div class="listing-card-info-icon">
+														<div class="inc-fleat-icon"><img src="{% static 'assets/img/bathtub.svg' %}" width="13" alt="" /></div>{{ s.value }} Bath
+													</div>
+												{% endif %}
+											{% endfor %}
+										{% endif %}
+										<div class="listing-card-info-icon">
+											<div class="inc-fleat-icon"><img src="{% static 'assets/img/move.svg' %}" width="13" alt="" /></div>{{ listing.get_sqft }} sqft
+										</div>
+									</div>
+								</div>
+								
+								<div class="listing-detail-footer">
+									<div class="footer-first">
+										<div class="foot-location"><img src="{% static 'assets/img/pin.svg' %}" width="18" alt="" />{{ listing.location }}, {{ listing.state }}.</div>
+									</div>
+									<div class="footer-flex">
+										<a href="{{ listing.get_absolute_url }}" class="prt-view">View</a>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						{% endfor %}
+
+					</div>
+				</div>
+			</div>
+			{% else %}
+				No hot deals available.
+			{% endif %}
+			
+		</div>
+	</section>
+	
+
+	{% if featured_agents %}
+	<section>
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-7 col-md-10 text-center">
+					<div class="sec-heading center">
+						<h2><a href="{% url 'agents:public-agents-list' %}">Our Agents</a></h2>
+						<!--<p>At vero eos et accusamus et iusto odio di</p>-->
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				{% for agent in featured_agents %}
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<div class="agents-grid">
+						
+						<div class="agents-grid-wrap">
+							
+							<div class="fr-grid-thumb">
+								<a href="{{ agent.get_public_agent_details }}">
+									<img src="{% if agent.display_picture %} {{ agent.display_picture.url }} {% else %} {% static 'assets/img/agent/no-display-picture.png' %} {% endif %}" class="img-fluid mx-auto" alt="" />
+								</a>
+							</div>
+							
+							<div class="fr-grid-deatil">
+								<div class="fr-grid-deatil-flex">
+									<h5 class="fr-can-name">
+										<a href="{{ agent.get_public_agent_details }}">
+											{% if agent.user.get_full_name %}
+												{{ agent.user.get_full_name }}
+											{% else %}
+												{{ agent.user.username | title }}
+											{% endif %}
+										</a>
+										
+									</h5>
+									<span class="agent-property"><strong>Agency:</strong> ({{ agent.organization.agency }})</span>
+								</div>
+								<!--
+								<div class="fr-grid-deatil-flex-right">
+									<div class="agent-email"><a href="{{ agent.get_public_agent_details }}"><i class="ti-email"></i></a></div>
+								</div>
+								-->
+							</div>
+							
+						</div>
+						
+						<div class="fr-grid-info">
+							<ul>
+								<li><strong>{{ agent.listing_set.all.count }}</strong> Properties</li>
+								
+								<!--<li>
+									<div class="fr-can-rating">
+										<i class="fas fa-star filled"></i>
+										<i class="fas fa-star filled"></i>
+										<i class="fas fa-star filled"></i>
+										<i class="fas fa-star filled"></i>
+										<i class="fas fa-star"></i>
+										<span class="reviews_text">(42 Reviews)</span>
+									</div>
+								</li>-->
+							</ul>
+						</div>
+						
+						<div class="fr-grid-footer">
+							<!--<div class="fr-grid-footer-flex">
+								<span class="fr-position"><i class="lni-map-marker"></i>3599 Huntz Lane</span>
+							</div>-->
+							<div class="fr-grid-footer-flex-right">
+								<a href="{{ agent.get_public_agent_details }}" class="prt-view" tabindex="0">View</a>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			
+			<!-- Pagination -->
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 text-center">
+					<a href="{% url 'agents:public-agents-list' %}" class="btn btn-theme-light-2 rounded">Explore More Agents</a>
+				</div>
+			</div>
+			
+		</div>
+	</section>
+	{% endif %}
+	<div class="clearfix"></div>
+
+	<!--
+	<section class="bg-orange">
+		<div class="container">
+		
+			<div class="row justify-content-center">
+				<div class="col-lg-7 col-md-10 text-center">
+					<div class="sec-heading center">
+						<h2>Good Reviews by Customers</h2>
+						<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row justify-content-center">
+				
+				<div class="col-lg-12 col-md-12">
+					
+					<div class="smart-textimonials smart-center" id="smart-textimonials">
+						
+						<div class="item">
+							<div class="item-box">
+								<div class="smart-tes-author">
+									<div class="st-author-box">
+										<div class="st-author-thumb">
+											<div class="quotes bg-blue"><i class="ti-quote-right"></i></div>
+											<img src="https://via.placeholder.com/400x400" class="img-fluid" alt="" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="smart-tes-content">
+									<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti.</p>
+								</div>
+								
+								<div class="st-author-info">
+									<h4 class="st-author-title">Adam Williams</h4>
+									<span class="st-author-subtitle">CEO Of Microwoft</span>
+								</div>
+							</div>
+						</div>
+						
+						<div class="item">
+							<div class="item-box">
+								<div class="smart-tes-author">
+									<div class="st-author-box">
+										<div class="st-author-thumb">
+											<div class="quotes bg-inverse"><i class="ti-quote-right"></i></div>
+											<img src="https://via.placeholder.com/400x400" class="img-fluid" alt="" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="smart-tes-content">
+									<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti.</p>
+								</div>
+								
+								<div class="st-author-info">
+									<h4 class="st-author-title">Retha Deowalim</h4>
+									<span class="st-author-subtitle">CEO Of Apple</span>
+								</div>
+							</div>
+						</div>
+						
+						<div class="item">
+							<div class="item-box">
+								<div class="smart-tes-author">
+									<div class="st-author-box">
+										<div class="st-author-thumb">
+											<div class="quotes bg-purple"><i class="ti-quote-right"></i></div>
+											<img src="https://via.placeholder.com/400x400" class="img-fluid" alt="" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="smart-tes-content">
+									<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti.</p>
+								</div>
+								
+								<div class="st-author-info">
+									<h4 class="st-author-title">Sam J. Wasim</h4>
+									<span class="st-author-subtitle">Pio Founder</span>
+								</div>
+							</div>
+						</div>
+						
+						<div class="item">
+							<div class="item-box">
+								<div class="smart-tes-author">
+									<div class="st-author-box">
+										<div class="st-author-thumb">
+											<div class="quotes bg-primary"><i class="ti-quote-right"></i></div>
+											<img src="https://via.placeholder.com/400x400" class="img-fluid" alt="" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="smart-tes-content">
+									<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti.</p>
+								</div>
+								
+								<div class="st-author-info">
+									<h4 class="st-author-title">Usan Gulwarm</h4>
+									<span class="st-author-subtitle">CEO Of Facewarm</span>
+								</div>
+							</div>
+						</div>
+						
+						<div class="item">
+							<div class="item-box">
+								<div class="smart-tes-author">
+									<div class="st-author-box">
+										<div class="st-author-thumb">
+											<div class="quotes bg-success"><i class="ti-quote-right"></i></div>
+											<img src="https://via.placeholder.com/400x400" class="img-fluid" alt="" />
+										</div>
+									</div>
+								</div>
+								
+								<div class="smart-tes-content">
+									<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti.</p>
+								</div>
+								
+								<div class="st-author-info">
+									<h4 class="st-author-title">Shilpa Shethy</h4>
+									<span class="st-author-subtitle">CEO Of Zapple</span>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</section>
+	-->
+
+
+	{% if latest_posts %}
+	<section>
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-7 col-md-10 text-center">
+					<div class="sec-heading center">
+						<h2><a href="{% url 'blog:public-posts' %}">News &amp; Articles</a></h2>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				{% for post in latest_posts %}
+					<div class="col-lg-4 col-md-6">
+						<div class="blog-wrap-grid">
+							
+							<div class="blog-thumb">
+								<a href="{{ post.get_absolute_url }}"><img src="{{ post.image.url }}" class="img-fluid" alt="" /></a>
+							</div>
+							
+							<div class="blog-info">
+								<span class="post-date"><i class="ti-calendar"></i>{{ post.created_at | date }}</span>
+							</div>
+							
+							<div class="blog-body">
+								<h4 class="bl-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+								<p>{{ post.content | truncatewords:20 }}</p>
+								<a href="{{ post.get_absolute_url }}" class="bl-continue">Continue</a>
+							</div>
+							
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			
+		</div>		
+	</section>
+	{% endif %}
+
+	<!--
+	<section class="bg-light">
+		<div class="container">
+			<div class="row align-items-center">
+				
+				<div class="col-lg-7 col-md-12 col-sm-12 content-column">
+					<div class="content_block_2">
+						<div class="content-box">
+							<div class="sec-title light">
+								<p class="text-blue">Download apps</p>
+								<h2>Download App Free App For Android and iPhone</h2>
+							</div>
+							<div class="text">
+								<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto accusantium.</p>
+							</div>
+							<div class="btn-box clearfix mt-5">
+								<a href="index.html" class="download-btn play-store">
+									<i class="fab fa-google-play"></i>
+									<span>Download on</span>
+									<h3>Google Play</h3>
+								</a>
+								
+								<a href="index.html" class="download-btn app-store">
+									<i class="fab fa-apple"></i>
+									<span>Download on</span>
+									<h3>App Store</h3>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-lg-5 col-md-12 col-sm-12 image-column">
+					<div class="image-box">
+						<figure class="image"><img src="https://via.placeholder.com/600x600" class="img-fluid" alt=""></figure>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	-->
+
+
+
+	<script>
+		const offerBox = document.getElementById("offer-box")
+		const countdownBox = document.getElementById("countdown-box")
+		const dayBox = document.getElementById("day-box")
+		const hourBox = document.getElementById("hour-box")
+		const minuteBox = document.getElementById("minute-box")
+		const secondBox = document.getElementById("second-box")
+		
+		const offerDate = Date.parse(offerBox.textContent)
+
+		setInterval(()=>{
+			const now = new Date().getTime()
+			const diff = offerDate - now
+
+			const d = Math.floor(offerDate / (1000 * 60 * 60 * 24) - (now /  (1000 * 60 * 60 * 24)))
+			const h = Math.floor((offerDate / (1000 * 60 * 60) - (now /  (1000 * 60 * 60))) % 24)
+			const m = Math.floor((offerDate / (1000 * 60) - (now /  (1000 * 60))) % 60)
+			const s = Math.floor((offerDate / (1000) - (now /  (1000))) % 60)
+
+			if (diff > 0){
+			dayBox.innerHTML = d
+			hourBox.innerHTML = h
+			minuteBox.innerHTML = m
+			secondBox.innerHTML = s
+			}
+			else{
+			countdownBox.innerHTML = "Offer Ends"
+			}
+		}, 1000)
+	</script>
+
+{% endblock content %}

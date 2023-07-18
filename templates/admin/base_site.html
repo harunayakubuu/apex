@@ -1,0 +1,14 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block branding %}
+    <h1 id='head'>
+        Apex Admin Area
+        <!--<img src="{% static 'frontend/images/small_logo.png' %}" height=50 width=50 alt="Real Site" class="brand_img"> Admin Area-->
+    </h1>
+{% endblock branding %}
+
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'frontend/css/admin.css' %}">
+{% endblock %}

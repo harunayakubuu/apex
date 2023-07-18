@@ -1,0 +1,22 @@
+
+<div class="modal login fade" id="termsModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h4 class="modal-title" id="termsModalLabel">Terms &amp; Conditions</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            {% for term in terms %}
+              <div class="row mb-2">
+                <p>
+                  <strong>{{ forloop.counter }}. {{ term.term }}</strong>
+                  {{ term.condition | safe }}
+                </p>
+              </div>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

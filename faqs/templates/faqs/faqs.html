@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+
+{% block title %}FAQs{% endblock title %}
+
+{% block content %}
+	<div class="page-title">
+		<div class="container">
+			<div class="col-lg-12 col-md-12">
+				<h2 class="ipt-title">FAQs</h2>
+				<span class="ipn-subtitle">Frequently Asked Questions</span>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-lg-10 col-md-12">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<section class="bg-light">
+		<div class="container">
+			<div class="col-lg-12 col-md-12">
+				<h3>Frequently Asked Questions</h3>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-10 col-md-12 col-sm-12">					
+					<div class="tab-content" id="myTabContent">
+						{% if page_obj %}
+							<div class="accordion" id="generalac">
+								{% for faq in page_obj %}
+									<div class="card">
+										<div class="card-header" id="{{ faq.id }}">
+											<h2 class="mb-0">
+											<button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#{{ faq.slug }}" aria-expanded="true" aria-controls="{{ faq.slug }}">
+												{{ forloop.counter }}. {{ faq.question }}
+											</button>
+											</h2>
+										</div>
+
+										<div id="{{ faq.slug }}" class="collapse" aria-labelledby="{{ faq.id }}" data-bs-parent="#generalac">
+											<div class="card-body">
+											<p class="ac-para">
+												{{ faq.answer|linebreaks }}
+											</p>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12">
+									{% if page_obj.has_other_pages %}
+										<ul class="pagination p-center">
+											{% if page_obj.has_previous %}
+												<li class="page-item">
+													<a class="page-link" href="?page=1" aria-label="Previous">
+														<!--<span class="ti-arrow-left"></span>-->
+														<span> &#8810; </span>
+													</a>
+													<a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+														<!--<span class="ti-arrow-left"></span>-->
+														<span class=""> &lt; </span>
+													</a>
+												</li>
+											{% endif %}
+												
+											<li class="page-item"><span style="width:150px">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span></li>
+												
+											{% if page_obj.has_next %}
+												<li class="page-item">
+													<a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+														<span> &#62; </span>
+														<!--<span class="sr-only">Next</span>-->
+													</a>
+													<a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+														<!--<span class="ti-arrow-right"></span>-->
+														<span> &#8811; </span>
+													</a>
+												</li>
+											{% endif %}
+										</ul>
+									{% endif %}
+								</div>
+							</div>
+						{% else %}
+							<p>
+								No data records.
+							</p>
+						{% endif %}
+					</div>
+					
+				</div>
+				
+			</div>
+		</div>
+	</section>
+{% endblock content %}

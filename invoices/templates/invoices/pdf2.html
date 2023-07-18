@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Invoice: {{ sale.transaction_id }}</title>
+        <meta charset="utf-8">
+
+        <style>
+            .title{
+                text-align: center;
+                font-size: 3em;
+                font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                margin-bottom: 0px 0px 0px 0px;
+            }
+
+            body{
+                margin: 20px;
+            }
+
+            .transaction{
+                position:absolute;
+            }
+
+            .no {
+                text-align: left;
+            }
+
+            th, td {
+                padding: 5px 0px 5px 0px;
+            }
+
+            thead, th, tr, td {
+                border: solid black;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="row">
+            <div class="col-lg-6">
+                <img src="C:\Users\Hp\projects\apex_site\static\images\logo_light.png">
+            </div>
+            <div class="col-lg-6 transaction">
+                Transaction ID.: {{ sale.transaction_id }}
+                Date: {{ sale.created | date }}
+            </div>
+        </div>
+        
+
+        <h1 class="title">Invoice</h1>
+
+        <table>
+            <caption>Invoice for the Sale of {{ sale.position.listing.name }}</caption>
+            <thead>
+                <th class="no">#</th>
+                <th>Heading Item 1</th>
+                <th>Heading Item 2</th>
+                <th>Heading Item 3</th>
+                <th>Heading Item 4</th>
+                
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="no">1</td>
+                    <td>Row Content 1</td>
+                    <td>Row Content 2</td>
+                    <td>Row Content 3</td>
+                    <td>Row Content 4</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
+    </body>
+</html>

@@ -1,0 +1,454 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}{% if agent.user.get_full_name %}{{ agent.user.get_full_name }}{% else %}{{ agent.user.username }} {% endif %}{% endblock %}
+
+{% block content %}
+	<div class="image-cover page-title">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					
+					<h2 class="ipt-title">Agent Detail</h2>
+					<span class="ipn-subtitle">{% if agent.user.get_full_name %}{{ agent.user.get_full_name }}{% else %}{{ agent.user.username }} {% endif %}</span>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<section class="agent-page p-0 gray-simple">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					<div class="agency agency-list overlio-40">
+					
+						<div class="agency-avatar">
+							<img src="{% if agent.display_picture %} {{ agent.display_picture.url }} {% else %} {% static 'assets/img/agent/no-display-picture.png' %} {% endif %}" alt="">
+						</div>
+						
+						<div class="agency-content">
+							<div class="agency-name">
+								<h4>
+									{% if agent.user.get_full_name %}
+										{{ agent.user.get_full_name }}
+									{% else %}
+										{{ agent.user.username | title }}
+									{% endif %}
+									<a href="#">
+										({{ agent.organization.agency }})
+									</a>
+								</h4>
+								<span><i class="lni-map-marker"></i>Agent Location: </span>
+							</div>
+							
+							<div class="agency-desc">
+								<p>
+									{{ agent.about|linebreaks }}
+								</p>
+							</div>
+							
+							<div class="prt-detio">
+								<span>{{ agent_listings.count }} Properties</span>
+							</div>
+							
+							<ul class="social-icons mt-3">
+								<li><a class="facebook" href="#"><i class="lni-facebook"></i></a></li>
+								<li><a class="twitter" href="#"><i class="lni-twitter"></i></a></li>
+								<li><a class="instagram" href="#"><i class="lni-instagram"></i></a></li>
+								<li><a class="linkedin" href="#"><i class="lni-linkedin"></i></a></li>
+								<li><a class="whatsapp" href="#"><i class="lni-whatsapp"></i></a></li>
+							</ul>
+							<div class="clearfix"></div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="min gray-simple">
+		<div class="container">
+			<div class="row">
+			
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<!--
+					<div class="block-wrap">
+						<div class="block-header">
+							<h4 class="block-title">Agent Info</h4>
+						</div>
+						<div class="block-body">
+							<ul class="dw-proprty-info">
+								<li><strong>Ceo</strong>Mr. Adam Vilawo</li>
+								<li><strong>Email</strong>Isvali@gmail.com</li>
+								<li><strong>Phone</strong>+91 235 658 4758</li>
+								<li><strong>Skype</strong>isva24lia</li>
+								<li><strong>Address</strong>320, Near Iswar</li>
+								<li><strong>City</strong>New York</li>
+								<li><strong>Country</strong>United State</li>
+								<li><strong>Stab.</strong>2007</li>
+							</ul>
+						</div>	
+					</div>
+					-->
+					
+					<div class="block-wraps">
+						<div class="block-wraps-header">
+						
+							<div class="block-header">
+								<ul class="nav nav-tabs customize-tab" id="myTab" role="tablist">
+									<li class="nav-item" role="presentation">
+									<a class="nav-link active" id="sale-tab" data-bs-toggle="tab" href="#sale" role="tab" aria-controls="sale" aria-selected="true">For Sale</a>
+									</li>
+									<li class="nav-item" role="presentation">
+									<a class="nav-link" id="rental-tab" data-bs-toggle="tab" href="#rental" role="tab" aria-controls="rental" aria-selected="false">For Rent</a>
+									</li>
+								</ul>
+							</div>
+							
+							<div class="block-body">
+								<div class="tab-content" id="myTabContent">
+								
+									<div class="tab-pane fade show active" id="sale" role="tabpanel" aria-labelledby="sale-tab">
+										{% if agent_sale_listings %}
+										<div class="row">
+											{% for listing in agent_sale_listings %}
+											<div class="col-lg-4 col-md-6 col-sm-12">
+
+												<div class="single-items">
+													<div class="property-listing shadow-none property-2 border">
+												
+														<div class="listing-img-wrapper">
+															<div class="list-img-slide">
+																{% if listing.listingpicture_set.all %}
+																<div class="click">
+																	{% for pic in listing.listingpicture_set.all %}
+																	<div>
+																		<img src="{{ pic.picture.url }}" class="img-fluid mx-auto" width="1200px" height="800" alt="" />
+																	</div>
+																	{% endfor %} 
+																</div>
+																{% else %}
+																	<img src="{% static 'assets/img/grid/no-image.jpg' %}" class="img-fluid mx-auto" alt="" /></a>
+																{% endif %}
+															</div>
+														</div>
+														
+														<div class="listing-detail-wrapper">
+															<div class="listing-short-detail">
+																<div class="listing-short-detail">
+																	<h5 class="verified">
+																		<!--<div class="checkmark"></div>-->
+																		<a href="{{ listing.get_absolute_url }}" class="prt-link-detail">{{ listing.name }}</a>
+
+																		{% if listing.status == 'sale' %}
+																			<span class="prt-types sale">For {{ listing.status | title }}</span>
+																		{% endif %}
+																		{% if listing.status == 'rent' %}
+																			<span class="prt-types rent">For {{ listing.status | title }}</span>
+																		{% endif %}
+																	</h5>
+																</div>
+																<div class="listing-short-detail-flex">
+																	<h6 class="prt-price-fix">
+																		&#8358;{% if listing.price < 1000000 %}
+																			{{ listing.price|intcomma }}
+																		{% else %}
+																			{{ listing.price|intword }}
+																		{% endif %}
+																		{% if listing.status == 'rent' %}<sub>/year</sub>{% endif %}
+
+																		<span class="badge badge-sm {% if listing.price_status == 'fixed' %} bg-danger {% else %} bg-success {% endif %}" style="color: whitesmoke;">
+																			{{ listing.price_status|upper }}
+																		</span>
+																	</h6>
+																</div>
+															</div>
+														</div>
+														
+														<div class="price-features-wrapper">
+															<div class="list-fx-features">
+																{% if listing.listingspecification_set.all %}
+																	{% for s in listing.listingspecification_set.all %}
+																		{% if s.attribute.name == 'Bedroom' %}
+																			<div class="listing-card-info-icon">
+																				<div class="inc-fleat-icon"><img src="{% static 'assets/img/bed.svg' %}" width="13" alt="" /></div>{{ s.value }} Beds
+																			</div>
+																		{% endif %}
+																		{% if s.attribute.name == 'Bathroom' %}
+																			<div class="listing-card-info-icon">
+																				<div class="inc-fleat-icon"><img src="{% static 'assets/img/bathtub.svg' %}" width="13" alt="" /></div>{{ s.value }} Bath
+																			</div>
+																		{% endif %}
+																	{% endfor %}
+																{% endif %}
+																<div class="listing-card-info-icon">
+																	<div class="inc-fleat-icon"><img src="{% static 'assets/img/move.svg' %}" width="13" alt="" /></div>{{ listing.get_sqft }} sqft
+																</div>
+															</div>
+														</div>
+														
+														<div class="listing-detail-footer">
+															<div class="footer-first">
+																<div class="foot-location"><img src="{% static 'assets/img/pin.svg' %}" width="18" alt="" />{{ listing.location }}, {{ listing.state }}.</div>
+															</div>
+															<div class="footer-flex">
+																<a href="{{ listing.get_absolute_url }}" class="prt-view">View</a>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+												
+											</div>
+											{% endfor %}											
+											
+										</div>
+										
+										<div class="row">
+											<div class="col-lg-12 col-md-12 col-sm-12 text-center">
+												<a href="listings-list-with-sidebar.html" class="btn btn-theme-light-2 rounded">Explore More Property</a>
+											</div>
+										</div>
+
+										{% else %}
+											<h3>No properties for sale availabel </h3>
+										{% endif %}
+									</div>
+									
+									<div class="tab-pane fade" id="rental" role="tabpanel" aria-labelledby="rental-tab">
+										{% if agent_rent_listings %}
+											<div class="row">
+												{% for listing in agent_rent_listings %}
+												<div class="col-lg-4 col-md-6 col-sm-12">
+
+													<div class="single-items">
+														<div class="property-listing shadow-none property-2 border">
+													
+															<div class="listing-img-wrapper">
+																<div class="list-img-slide">
+																	{% if listing.listingpicture_set.all %}
+																	<div class="click">
+																		{% for pic in listing.listingpicture_set.all %}
+																		<div>
+																			<img src="{{ pic.picture.url }}" class="img-fluid mx-auto" width="1200px" height="800" alt="" />
+																		</div>
+																		{% endfor %} 
+																	</div>
+																	{% else %}
+																		<img src="{% static 'assets/img/grid/no-image.jpg' %}" class="img-fluid mx-auto" alt="" /></a>
+																	{% endif %}
+																</div>
+															</div>
+															
+															<div class="listing-detail-wrapper">
+																<div class="listing-short-detail">
+																	<div class="listing-short-detail">
+																		<h5 class="verified">
+																			<!--<div class="checkmark"></div>-->
+																			<a href="{{ listing.get_absolute_url }}" class="prt-link-detail">{{ listing.name }}</a>
+
+																			{% if listing.status == 'sale' %}
+																				<span class="prt-types sale">For {{ listing.status | title }}</span>
+																			{% endif %}
+																			{% if listing.status == 'rent' %}
+																				<span class="prt-types rent">For {{ listing.status | title }}</span>
+																			{% endif %}
+																		</h5>
+																	</div>
+																	<div class="listing-short-detail-flex">
+																		<h6 class="prt-price-fix">
+																			&#8358;{% if listing.price < 1000000 %}
+																				{{ listing.price|intcomma }}
+																			{% else %}
+																				{{ listing.price|intword }}
+																			{% endif %}
+																			{% if listing.status == 'rent' %}<sub>/year</sub>{% endif %}
+
+																			<span class="badge badge-sm {% if listing.price_status == 'fixed' %} bg-danger {% else %} bg-success {% endif %}" style="color: whitesmoke;">
+																				{{ listing.price_status|upper }}
+																			</span>
+																		</h6>
+																	</div>
+																</div>
+															</div>
+															
+															<div class="price-features-wrapper">
+																<div class="list-fx-features">
+																	{% if listing.listingspecification_set.all %}
+																		{% for s in listing.listingspecification_set.all %}
+																			{% if s.attribute.name == 'Bedroom' %}
+																				<div class="listing-card-info-icon">
+																					<div class="inc-fleat-icon"><img src="{% static 'assets/img/bed.svg' %}" width="13" alt="" /></div>{{ s.value }} Beds
+																				</div>
+																			{% endif %}
+																			{% if s.attribute.name == 'Bathroom' %}
+																				<div class="listing-card-info-icon">
+																					<div class="inc-fleat-icon"><img src="{% static 'assets/img/bathtub.svg' %}" width="13" alt="" /></div>{{ s.value }} Bath
+																				</div>
+																			{% endif %}
+																		{% endfor %}
+																	{% endif %}
+																	<div class="listing-card-info-icon">
+																		<div class="inc-fleat-icon"><img src="{% static 'assets/img/move.svg' %}" width="13" alt="" /></div>{{ listing.get_sqft }} sqft
+																	</div>
+																</div>
+															</div>
+															
+															<div class="listing-detail-footer">
+																<div class="footer-first">
+																	<div class="foot-location"><img src="{% static 'assets/img/pin.svg' %}" width="18" alt="" />{{ listing.location }}, {{ listing.state }}.</div>
+																</div>
+																<div class="footer-flex">
+																	<a href="{{ listing.get_absolute_url }}" class="prt-view">View</a>
+																</div>
+															</div>
+															
+														</div>
+													</div>
+													
+												</div>
+												{% endfor %}											
+												
+											</div>
+										
+											<div class="row">
+												<div class="col-lg-12 col-md-12 col-sm-12 text-center">
+													<a href="listings-list-with-sidebar.html" class="btn btn-theme-light-2 rounded">Explore More Property</a>
+												</div>
+											</div>
+
+										{% else %}
+											<h3>No properties for rent availabel </h3>
+										{% endif %}
+										</div>
+									</div>
+								</div>
+							</div>
+						
+						</div>
+					</div>
+				</div>
+				
+				<!--
+				<div class="col-lg-4 col-md-12 col-sm-12">
+					<div class="details-sidebar">
+						<div class="sides-widget">
+							<div class="sides-widget-header">
+								<div class="agent-photo"><img src="https://via.placeholder.com/400x400" alt=""></div>
+								<div class="sides-widget-details">
+									<h4><a href="#">Adam D. Okraar</a></h4>
+									<span><i class="lni-phone-handset"></i>(91) 123 456 7895</span>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							
+							<div class="sides-widget-body simple-form">
+								<div class="form-group">
+									<label>Email</label>
+									<input type="text" class="form-control" placeholder="Your Email">
+								</div>
+								<div class="form-group">
+									<label>Phone No.</label>
+									<input type="text" class="form-control" placeholder="Your Phone">
+								</div>
+								<div class="form-group">
+									<label>Description</label>
+									<textarea class="form-control">I'm interested in this property.</textarea>
+								</div>
+								<button class="btn btn-black btn-md rounded full-width">Send Message</button>
+							</div>
+						</div>
+						
+
+						<div class="sidebar-widgets">
+							<h4>Featured Property</h4>
+							<div class="sidebar_featured_property">
+								
+								<div class="sides_list_property">
+									<div class="sides_list_property_thumb">
+										<img src="https://via.placeholder.com/1200x800" class="img-fluid" alt="">
+									</div>
+									<div class="sides_list_property_detail">
+										<h4><a href="single-property-1.html">Loss vengel New Apartment</a></h4>
+										<span><i class="ti-location-pin"></i>Sans Fransico</span>
+										<div class="lists_property_price">
+											<div class="lists_property_types">
+												<div class="property_types_vlix sale">For Sale</div>
+											</div>
+											<div class="lists_property_price_value">
+												<h4>$4,240</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="sides_list_property">
+									<div class="sides_list_property_thumb">
+										<img src="https://via.placeholder.com/1200x800" class="img-fluid" alt="">
+									</div>
+									<div class="sides_list_property_detail">
+										<h4><a href="single-property-1.html">Montreal Quriqe Apartment</a></h4>
+										<span><i class="ti-location-pin"></i>Liverpool, London</span>
+										<div class="lists_property_price">
+											<div class="lists_property_types">
+												<div class="property_types_vlix">For Rent</div>
+											</div>
+											<div class="lists_property_price_value">
+												<h4>$7,380</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="sides_list_property">
+									<div class="sides_list_property_thumb">
+										<img src="https://via.placeholder.com/1200x800" class="img-fluid" alt="">
+									</div>
+									<div class="sides_list_property_detail">
+										<h4><a href="single-property-1.html">Curmic Studio For Office</a></h4>
+										<span><i class="ti-location-pin"></i>Montreal, Canada</span>
+										<div class="lists_property_price">
+											<div class="lists_property_types">
+												<div class="property_types_vlix buy">For Buy</div>
+											</div>
+											<div class="lists_property_price_value">
+												<h4>$8,730</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="sides_list_property">
+									<div class="sides_list_property_thumb">
+										<img src="https://via.placeholder.com/1200x800" class="img-fluid" alt="">
+									</div>
+									<div class="sides_list_property_detail">
+										<h4><a href="single-property-1.html">Montreal Quebec City</a></h4>
+										<span><i class="ti-location-pin"></i>Sreek View, New York</span>
+										<div class="lists_property_price">
+											<div class="lists_property_types">
+												<div class="property_types_vlix">For Rent</div>
+											</div>
+											<div class="lists_property_price_value">
+												<h4>$6,240</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+							
+						</div>
+					
+					</div>
+						
+				</div>
+				-->
+			
+			</div>					
+		</div>	
+	</section>
+{% endblock content %}

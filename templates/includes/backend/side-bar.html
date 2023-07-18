@@ -1,0 +1,270 @@
+{% load static %}
+
+{% if request.user.is_authenticated %}
+    
+    <div class="leftside-menu">
+        <a href="{% url 'accounts:dashboard' %}" class="logo text-center logo-light">
+            <span class="logo-lg">
+                <img src="{% static 'assets/img/logo-sidebar.png' %}" alt="" height="30">
+            </span>
+            <span class="logo-sm">
+                <img src="{% static 'assets/img/logo-sidebar.png' %}" alt="" height="30">
+            </span>
+        </a>
+
+        <a href="{% url 'accounts:dashboard' %}" class="logo text-center logo-dark">
+            <span class="logo-lg">
+                <img src="{% static 'assets/img/logo-sidebar.png' %}" alt="" height="30">
+            </span>
+            <span class="logo-sm">
+                <img src="{% static 'assets/img/logo-sidebar.png' %}" alt="" height="30">
+            </span>
+        </a>
+
+        <div class="h-100" id="leftside-menu-container" data-simplebar>
+            <ul class="side-nav">
+                <li class="side-nav-item">
+                    <a href="{% url 'accounts:dashboard' %}" class="side-nav-link">
+                        <i class="uil-home-alt"></i>
+                        <span> Dashboard </span>
+                    </a>
+                </li>
+
+                <li class="side-nav-title side-nav-item">Apps</li>
+
+                {% if request.user.is_superuser %}
+                    <li class="side-nav-item">
+                        <a href="{% url 'listings:listing-csv' %}" class="side-nav-link">
+                            <i class="uil-comment-alt-message"></i>
+                            <span>Properties CSV </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#usersPages" aria-expanded="false" aria-controls="usersPages" class="side-nav-link">
+                            <i class="uil-users-alt"></i>
+                            <span>Users</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="usersPages">
+                            <ul class="side-nav-second-level">
+                                <li><a href="{% url 'accounts:all-users' %}">All Users</a></li>
+                                <li><a href="{% url 'agents:agents-list' %}">All Agents</a></li>
+                                <li><a href="{% url 'clients:clients-list' %}">All Clients</a></li>
+                                <li><a href="{% url 'agencies:admin-organisor-users-list' %}">All Organisors</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'agencies:agencies-list' %}" class="side-nav-link">
+                            <i class="uil-users-alt"></i>
+                            <span>Agencies </span>
+                        </a>
+                    </li>
+                
+                    <li class="side-nav-item">
+                        <a href="{% url 'contacts:contact-messages' %}" class="side-nav-link">
+                            <i class="uil-comment-alt-message"></i>
+                            <span> Contact Messages </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#salesPages" aria-expanded="false" aria-controls="salesPages" class="side-nav-link">
+                            <i class="mdi mdi-sale"></i>
+                            <span> Sales </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="salesPages">
+                            <ul class="side-nav-second-level">
+                                <li><a href="{% url 'sales:sales-list' %}">Sales List</a></li>
+                                <li><a href="{% url 'sales:sale-create' %}">New Sale</a></li>
+                                <li><a href="{% url 'sales:position-create' %}">Create Position</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    <!--<li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#invoicesPages" aria-expanded="false" aria-controls="invoicesPages" class="side-nav-link">
+                            <i class="mdi mdi-certificate"></i>
+                            <span> Invoices </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="invoicesPages">
+                            <ul class="side-nav-second-level">
+                                <li><a href="{# url 'invoices:sales_list' #}">Generate Invoices</a></li>
+                            </ul>
+                        </div>
+                    </li>-->
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#termsPages" aria-expanded="false" aria-controls="termsPages" class="side-nav-link">
+                            <i class="uil-copy-alt"></i>
+                            <span> Pages </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="termsPages">
+                            <ul class="side-nav-second-level">
+                                <li><a href="{% url 'pages:terms' %}">Terms &amp; Conditions</a></li>
+                                <li><a href="{% url 'pages:policies' %}">Privacy Policy</a></li>
+                                <li><a href="{% url 'pages:services-list' %}">Our Services</a></li>
+                            </ul>
+                        </div>
+                    </li>
+        
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#blogPages" aria-expanded="false" aria-controls="blogPages" class="side-nav-link">
+                            <i class="mdi mdi-blogger-outline"></i>
+                            <span> Blog </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="blogPages">
+                            <ul class="side-nav-second-level">
+                                <li><a href="{% url 'blog:all-posts' %}">Blog Posts</a></li>
+                                <li><a href="{% url 'blog:post-create' %}">New Post</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarFAQs" aria-expanded="false" aria-controls="sidebarFAQs" class="side-nav-link">
+                            <i class="uil-question-circle"></i>
+                            <span> FAQs </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarFAQs">
+                            <ul class="side-nav-second-level">
+                                <li><a href="{% url 'faqs:all-faqs' %}">FAQs</a></li>
+                                <li><a href="{% url 'faqs:faqs-create' %}">Add Question</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                {% endif %}
+
+                
+                <li class="side-nav-item">
+                    <a data-bs-toggle="collapse" href="#sidebarProperties" aria-expanded="false" aria-controls="sidebarProperties" class="side-nav-link">
+                        <i class="uil-store"></i>
+                        <span>Properties</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    
+                    <div class="collapse" id="sidebarProperties">
+                        <ul class="side-nav-second-level">
+                            {% if request.user.is_organisor %}
+                                {% if not request.user.organisor %}
+                                    <li><a href="{% url 'agencies:organisor-create' %}">Update Your Profile</a></li>
+                                {% else %}
+                                    {% if not request.user.profile.agency %}
+                                        <li><a href="{% url 'agencies:agency-create' %}">Update Agency Profile</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'listings:listings-list' %}">Properties</a></li>
+                                        <li><a href="{% url 'listings:listing-add' %}">New Property</a></li>
+                                    {% endif %}
+                                {% endif %}
+                                    
+                            {% elif request.user.is_client %}
+                                {% if request.user.client %}
+                                    <li><a href="{% url 'listings:listings-list' %}">My Properties</a></li>
+                                    <li><a href="{% url 'listings:listing-add' %}">Add New</a></li>
+                                {% else %}
+                                    <li><a href="{% url 'clients:client-create' %}">Update your profile</a></li>
+                                {% endif %}
+
+                            {% elif request.user.is_agent %}
+                                {% if request.user.agent %}
+                                    <li><a href="{% url 'listings:listings-list' %}">My Properties</a></li>
+                                {% else %}
+                                    <li><a href="{# url 'agents:agency-agent-create' #}">Update your profile</a></li>
+                                {% endif %}
+                            {% else %}
+                                <li><a href="{% url 'listings:listings-list' %}">Properties</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </li>
+                
+                {% if request.user.is_organisor %}
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#agentPages" aria-expanded="false" aria-controls="agentPages" class="side-nav-link">
+                            <i class="uil-folder-plus"></i>
+                            <span> Agents </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                       
+                        <div class="collapse" id="agentPages">
+                            <ul class="side-nav-second-level">
+                                 {% if request.user.profile.agency %}
+                                    <li><a href="{% url 'agents:agency-agents-list' %}">Agents List</a></li>
+                                    <li><a href="{% url 'agents:agency-agent-user-create' %}">New Agent</a></li>
+                                {% else %}
+                                    <li><a href="{% url 'agencies:agency-create' %}">Update your agency</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        
+                    </li>
+                {% endif %}
+
+                {% if request.user.is_client %}
+                    <li class="side-nav-item">
+                        <a href="{% url 'enquiries:my-enquiries' %}" class="side-nav-link">
+                            <i class="dripicons-information"></i>
+                            <span> My Enquiries </span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="side-nav-item">
+                    <a data-bs-toggle="collapse" href="#sidebarMyContacts" aria-expanded="false" aria-controls="sidebarMyContacts" class="side-nav-link">
+                        <i class="uil uil-notes"></i>
+                        <span> My Contacts </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sidebarMyContacts">
+                        <ul class="side-nav-second-level">
+                            <li><a href="{% url 'contacts:emergency-contacts' %}">Contacts</a></li>
+                            {% if request.user.emergencycontact_set.all.count < 4 %}
+                            <li><a href="{% url 'contacts:emergency-contact-create' %}">New Contact</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="side-nav-title side-nav-item">Settings</li>
+                
+                <li class="side-nav-item">
+                    <a data-bs-toggle="collapse" href="#accountSettings" aria-expanded="false" aria-controls="accountSettings" class="side-nav-link">
+                        <i class="mdi mdi-account-settings"></i>
+                        <span> Account Settings </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="accountSettings">
+                        <ul class="side-nav-second-level">
+                            <li><a href="{% url 'accounts:profile' %}">Profile</a></li>                           
+                            {% if request.user.is_organisor %}
+                                <li>
+                                    {% if not request.user.profile.agency %}
+                                        <a href="{% url 'agencies:agency-create' %}">Create Agency Profile</a>
+                                    {% else %}
+                                        <a href="{% url 'agencies:agency-update' slug=request.user.profile.agency.slug %}">Update Agency</a>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                            <li><a href="{% url 'password_change' %}">Password Change</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="side-nav-item">
+                    <a href="{% url 'logout' %}" class="side-nav-link">
+                        <i class="mdi mdi-logout me-1"></i>
+                        <span> Logout </span>
+                    </a>
+                </li>
+
+        </div>
+
+    </div>
+{% endif %}

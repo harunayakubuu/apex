@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+{% block title %}Blog Posts{% endblock title %}
+
+{% block content %}
+
+	<div class="page-title">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					
+					<h2 class="ipt-title">Our Articles</h2>
+					<span class="ipn-subtitle">Our Latest Articles &amp; News</span>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<section class="gray-simple">
+	
+		<div class="container">
+		
+			<div class="row">
+				<div class="col text-center">
+					<div class="sec-heading">
+						<h2>Latest News</h2>
+						<!--<p>We post regulary most powerful articles for help and support.</p>-->
+					</div>
+				</div>
+			</div>
+
+			{% if page_obj %}
+			<div class="row">
+				{% for post in page_obj %}
+				<div class="col-lg-4 col-md-6">
+					<div class="blog-wrap-grid">
+						
+						<div class="blog-thumb">
+							<a href="{{ post.get_absolute_url }}"><img src="{% if post.image.url %} {{ post.image.url }} {% else %} {% static 'img/blog/01.jpg' %} {% endif %}" class="img-fluid" alt="" /></a>
+						</div>
+						
+						<div class="blog-info">
+							<span class="post-date"><i class="ti-calendar"></i>{{ post.created_at|date }}</span>
+						</div>
+						
+						<div class="blog-body">
+							<h4 class="bl-title"><a href="{{ post.get_absolute_url }}">{{ post.title | title }}</a></h4>
+							<p>{{ post.content|truncatewords:"20" }}</p>
+							<a href="{{ post.get_absolute_url }}" class="bl-continue">Continue</a>
+						</div>
+						
+					</div>
+				</div>
+				{% endfor %}
+				
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					{% if page_obj.has_other_pages %}
+						<ul class="pagination p-center">
+							{% if page_obj.has_previous %}
+								<li class="page-item">
+									<a class="page-link" href="?page=1" aria-label="Previous">
+										<!--<span class="ti-arrow-left"></span>-->
+										<span> &#8810; </span>
+									</a>
+									<a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+										<!--<span class="ti-arrow-left"></span>-->
+										<span class=""> &lt; </span>
+									</a>
+								</li>
+							{% endif %}
+								
+							<li class="page-item"><span style="width:150px">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span></li>
+								
+							{% if page_obj.has_next %}
+								<li class="page-item">
+									<a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+										<span> &#62; </span>
+										<!--<span class="sr-only">Next</span>-->
+									</a>
+									<a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+										<!--<span class="ti-arrow-right"></span>-->
+										<span> &#8811; </span>
+									</a>
+								</li>
+							{% endif %}
+						</ul>
+					{% endif %}
+				</div>
+			</div>
+
+			{% else %}
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <p>
+                            No blog posts available.
+                        </p>
+                    </div>
+                </div>
+            {% endif %}					
+			
+		</div>
+				
+	</section>
+	{% endblock content %}

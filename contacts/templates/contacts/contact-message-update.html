@@ -1,0 +1,52 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Message Status Update{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'contacts:contact-message-details' message.id %}">Messages</a></li>
+                        <li class="breadcrumb-item active">Updage {{ message.name | title }}'s Message Status</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Updage {{ message.name | title }}'s Message Status</h4>
+            </div>
+        </div>
+    </div>
+    
+    {% if request.user.is_superuser or request.user.is_staff %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h3>Updage {{ message.name | title }}'s Message Status</h3>
+
+                        <form method="post">{% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    {{ form | crispy }}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <input class="btn btn-secondary" type="submit" value="Update">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+    {% endif %}
+
+{% endblock content %}

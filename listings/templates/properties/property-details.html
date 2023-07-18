@@ -1,0 +1,371 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ listing.name | title }}{% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'listings:listings-list' %}">Properties</a></li>
+                        <li class="breadcrumb-item active">{{ listing.name | title }}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{{ listing.name | title }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xxl-12 col-lg-12">
+            <div class="card d-block">
+                <div class="card-body">
+                    {% if request.user.is_authenticated %}
+                        
+                        
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                
+                                <h3 class=""> {{ listing.name | title }} &nbsp; &nbsp; {% if request.user.is_client or request.user.is_organisor %}{% if not listing.is_locked %}<a href="{% url 'listings:listing-edit' listing.id %}">Edit</a>{% else %} <i class="uil uil-padlock"></i> Locked {% endif %}{% endif %}</h3>
+                                <div class="dropdown">
+                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="dripicons-dots-3"></i>
+                                    </a>
+                                    {% if request.user.is_client or request.user.is_organisor %}
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        {% if not listing.is_locked %}
+                                        <a href="{% url 'listings:listing-edit' listing.id %}" class="dropdown-item"><i class="mdi mdi-pencil me-1"></i>Edit</a>
+                                        <a href="{% url 'listings:listing-delete' listing.id %}" class="dropdown-item"><i class="mdi mdi-delete me-1"></i>Delete</a>
+                                        {% else %}
+                                            <i class="uil uil-padlock"></i> Locked
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                </div>
+                            </div>
+                        
+
+                        <div class="badge
+                            {% if listing.approval_status == 'approved' %} 
+                                bg-success
+                            {% elif listing.approval_status == 'pending' %}
+                                bg-warning
+                            {% elif listing.approval_status == 'disapproved' %}
+                                bg-danger
+                            {% endif %}
+
+                            text-light mb-3">{{ listing.approval_status | title }}
+                        </div>
+
+                        <hr>
+
+                        {% if listing.disapproval_reason %}
+                            <h5>Reasons for disapproval:</h5>
+                            <div class="alert alert-warning alert-dismissible fade show mb-3" role="alert">
+                                <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+                                {{ listing.disapproval_reason|linebreaks }}
+                            </div>
+                            <hr>
+                        {% endif %}
+
+                        <p class="mb-3" style="background-color: rgb(195, 233, 207); padding: 5px;">
+                            <span class="pe-2 text-nowrap">
+                                Views <i class="mdi mdi-eye"></i>: <b>{{ listing.view_count }}</b>
+                            </span>
+                            | 
+                            <span class="pe-2 text-nowrap" style="margin-left: 10px;">
+                                Enquiries <i class="mdi mdi-comment-question"></i>: <b>{{ listing.enquiry_count }}</b> 
+                            </span>
+                        </p>
+
+                        <hr>
+
+                        <!-- <div class="row">
+                            <div class="mb-1">
+                                <h5>Date Created</h5>
+                                <p>{# listing.created_at | date #} <small class="text-muted">{# listing.created_at | time #}</small></p>
+                            </div>
+
+                            <div class="mb-2">
+                                <h5>Date Updated</h5>
+                                <p>{# listing.updated_at | date #} <small class="text-muted">{# listing.updated_at | time #}</small></p>
+                            </div>
+                        </div>
+                        <hr> -->
+
+                        <!--<div class="mt-2 mb-2">
+                            <p>Number of views: {# listing.view_count #}</p>
+                            <p>Number of Enquiries: {# listing.enquiry_count #}</p>
+                            <hr>
+                        </div>-->
+                        {% if request.user.is_client or request.user.is_agent  or request.user.is_organisor %}
+                            <div class="mt-2 mb-2">
+                                <ul>                        
+                                    <li>
+                                        {% if listing.listingpicture_set.all %}
+                                            Pictures <i class="mdi mdi-check-circle text-primary"></i>{% if not listing.is_locked %} |
+                                            <a href="{% url 'listings:listing-picture-add' listing.id %}">Edit</a>{% endif %}
+                                        {% else %}
+                                            Pictures not added <i class="mdi mdi-close-thick text-danger"></i>{% if not listing.is_locked %} |
+                                            <a href="{% url 'listings:listing-picture-add' listing.id %}">Add</a>{% endif %}
+                                        {% endif %}
+                                    </li>
+
+                                    <li>
+                                        {% if listing.listingspecification_set.all %}
+                                            Specifications <i class="mdi mdi-check-circle text-primary"></i>{% if not listing.is_locked %} |
+                                            <a href="{% url 'listings:listing-specs-add' listing.id %}">Edit</a>{% endif %}
+                                        {% else %}
+                                            Specifications not added <i class="mdi mdi-close-thick text-danger"></i>{% if not listing.is_locked %} |
+                                            <a href="{% url 'listings:listing-specs-add' listing.id %}">Add</a>{% endif %}
+                                        {% endif %}
+                                    </li>
+
+                                    <li>
+                                        {% if listing.listingvideo.video %}
+                                            Video uploaded <i class="mdi mdi-check-circle text-primary"></i>
+                                        {% else %}
+                                            Video not uploaded <i class="mdi mdi-close-thick text-danger"></i>{% if not listing.is_locked %} |
+                                            <a href="{% url 'listings:listing-video-add' listing.id %}">Add</a>{% endif %}
+                                        {% endif %}
+                                    </li>
+
+                                    {% if not listing.category.name == 'Land' %}
+                                    <li>
+                                        {% if listing.listingaddionalfeature_set.all %}
+                                            Additional Features Added <i class="mdi mdi-check-circle text-primary"></i>{% if not listing.is_locked %} |
+                                            <a href="{% url 'listings:listing-additional-features-add' listing.id %}">Edit</a>{% endif %}
+                                        {% else %}
+                                            Additional Features Not Added <i class="mdi mdi-close-thick text-danger"></i>{% if not listing.is_locked %} |
+                                            <a href="{% url 'listings:listing-additional-features-add' listing.id %}">Add</a>{% endif %}
+                                        {% endif %}
+                                    </li>
+                                    
+                                    <li>
+                                        {% if listing.listingfloor_set.all %}
+                                            Property floor(s) added<i class="mdi mdi-check-circle text-primary"></i>{% if not listing.is_locked %} | 
+                                            <a href="{% url 'listings:listing-floor-add' listing.id %}">Edit</a>{% endif %}
+                                        {% else %}
+                                            Property floor(s) not added <i class="mdi mdi-close-thick text-danger"></i>{% if not listing.is_locked %} | 
+                                            <a href="{% url 'listings:listing-floor-add' listing.id %}">Add</a>{% endif %}
+                                        {% endif %}
+                                    </li>
+                                    {% endif %}
+
+                                    <li>
+                                        {% if listing.listingnearby_set.all %}
+                                            Places nearby added<i class="mdi mdi-check-circle text-primary"></i>{% if not listing.is_locked%} | 
+                                            <a href="{% url 'listings:listing-nearby-add' listing.id %}">Edit</a>{% endif %}
+                                        {% else %}
+                                            Places nearby not added <i class="mdi mdi-close-thick text-danger"></i>{% if not listing.is_locked%} | 
+                                            <a href="{% url 'listings:listing-nearby-add' listing.id %}">Add</a>{% endif %}
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                                <hr>
+                            </div>
+                        {% endif %}
+                
+                        {% if request.user.is_agent or request.user.is_organisor %}
+                            {% if enquiries %}
+                                <table class="table mb-0 table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">SN</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Phone number</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for e in enquiries %}
+                                        <tr>
+                                            <th scope="row">{{ forloop.counter }}</th>
+                                            <td>{{ e.user_name }}</td>
+                                            <td>{{ e.user_phone }}</td>
+                                            <td>{{ e.user_email }}</td>
+                                            <td>{% if e.is_contacted %}Contacted {% else %} Not Contacted | <a href="{% url 'enquiries:enquiry-status-update' e.id %}">Update Status</a>{% endif %}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if listing.description %}
+                            <h5>Property Description:</h5>
+                            <p class="text-muted mb-2">
+                                {{ listing.description }}
+                            </p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% if listing.listingspecification_set.all %}
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">SPECIFICATIONS</h5>
+                    <ul>
+                    {% for spec in listing.listingspecification_set.all %}
+                        <li>
+                            {{ spec.attribute }} &nbsp; {{ spec.value }}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    {% if request.user.is_client %}
+                        {% if not listing.is_locked %}
+                            <a href="{% url 'listings:listing-specs-add' listing.id %}" class="btn btn-primary"><i class="mdi mdi-pencil me-1"></i>Edit</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if listing.listingpicture_set.all %}
+        <div class="row">
+            <div class="col-xxl-12 col-lg-12 col-md-6 col-sm-4 ">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">PICTURES</h5>
+                        <table>
+                            {% for pic in listing.listingpicture_set.all %}
+                                <tr class="mb-2">
+                                    <td>{{ pic.name | title }}</td>
+                                    <td>
+                                        <img src="{% if pic.is_featured %} {{ pic.picture.url }} {% else %}{% endif %}" width="200px" height="150px" alt="Featured Checkbox not checked">
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        {% if request.user.is_client %}
+                            {% if not listing.is_locked %}
+                                <a href="{% url 'listings:listing-picture-add' listing.id %}" class="btn btn-primary mt-2"><i class="mdi mdi-pencil me-2"></i>Edit</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- end card-->
+            </div>
+        </div>
+    {% endif %}
+
+    {% if listing.listingvideo.video %}
+        <div class="row">
+            <div class="col-xxl-12 col-lg-12 col-md-6 col-sm-4 ">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">VIDEO</h5>
+                            <p>
+                                <video controls width="560" height="315" allowfullscreen>
+                                    <source src="{{ listing.listingvideo.video.url }}" type="video/mp4">
+                                </video>
+                            </p>
+                            {% if request.user.is_client %}
+                                {% if not listing.is_locked %}
+                                    <a href="{% url 'listings:listing-video-change' listing.id listing.listingvideo.id %}" class="btn btn-primary"><i class="mdi mdi-pencil me-2"></i>Edit</a>
+                                    <a href="#" class="btn btn-danger"><i class="mdi mdi-delete me-2"></i>Delete</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if not listing.category.name == 'Land' %}
+        {% if listing.listingadditionalfeature_set.all %}
+            <div class="row">
+                <div class="col-xxl-12 col-lg-12 col-md-6 col-sm-4 ">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">ADDITIONAL FEATURES</h5>
+                                <ul>
+                                {% for add_feature in listing.listingadditionalfeature_set.all %}
+                                    {% for af in add_feature.feature.all %}
+                                    <li>
+                                        {{ af }}
+                                    </li>
+                                    {% endfor %}
+                                {% endfor %}
+                                </ul>
+                                {% if request.user.is_client %}
+                                    {% if not listing.is_locked %}
+                                        <a href="#" class="btn btn-primary"><i class="mdi mdi-pencil me-2"></i>Edit</a>
+                                    {% endif %}
+                                {% endif %}
+                        </div>
+                    </div>
+                    <!-- end card-->
+                </div>
+            </div>
+        {% endif %}
+
+        {% if listing.listingfloor_set.all %}
+            <div class="row">
+                <div class="col-xxl-12 col-lg-12 col-md-6 col-sm-4 ">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-3">Property Floors</h4>
+                                <ul>
+                                {% for floor in listing.listingfloor_set.all %}
+                                    <div class="mb-3">
+                                        <li><strong>{{ floor.floor | title }} Floor</strong></li>
+                                        Number of rooms - {{ floor.number_of_rooms }}<br>
+                                        Number of rest/bath rooms - {{ floor.rest_rooms }}<br>
+                                        Number of parlors - {{ floor.parlor }}<br>
+                                        Store - {% if floor.store %} Yes {% else %} No {% endif %}<br>
+                                    </div>
+                                {% endfor %}
+                                </ul>
+                                {% if request.user.is_client %}
+                                    {% if not listing.is_locked %}
+                                        <a href="#" class="btn btn-primary"><i class="mdi mdi-pencil me-2"></i>Edit</a>
+                                    {% endif %}
+                                {% endif %}
+                        </div>
+                    </div>
+                    <!-- end card-->
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+
+    {% if listing.listingnearby_set.all %}
+        <div class="row">
+            <div class="col-xxl-12 col-lg-12 col-md-6 col-sm-4 ">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Places Nearby</h5>
+                        <ul>
+                            {% for nearby in listing.listingnearby_set.all %}
+                                <li>
+                                    {{ nearby.name }}, location: {{ nearby.location }}, approximately
+                                    {{ nearby.approximate_distance }} km away from this property
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {% if not listing.is_locked %}
+                            <a href="{% url 'listings:listing-nearby-add' listing.id %}" class="btn btn-primary"><i class="mdi mdi-pencil me-2"></i>Edit</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock content %}

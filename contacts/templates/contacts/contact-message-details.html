@@ -1,0 +1,88 @@
+{% extends 'back-base.html' %}
+{% load static %}
+
+{% block title %}{{ message.name | title }}{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'contacts:contact-messages' %}">Contact Messages</a></li>
+                        <li class="breadcrumb-item active">{{ message.name | title }}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{{ message.name | title }}</h4>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.is_superuser or request.user.is_staff %}
+        <div class="row">
+            <div class="col-xxl-12 col-lg-12 col-md-6 col-sm-4">
+                <div class="card d-block">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h3 class="">{{ message.name | title }}</h3>
+                            <div class="dropdown">
+                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="dripicons-dots-3"></i>
+                                </a>
+                                {% if message.status != 'attended' %}
+                                    <div class="dropdown-menu dropdown-menu-end"> 
+                                        <a href="{% url 'contacts:contact-message-update' message.id %}" class="dropdown-item"><i class="mdi mdi-pencil me-1"></i>Edit</a>
+                                        <!-- <a href="#" class="dropdown-item"><i class="mdi mdi-delete me-1"></i>Delete</a>-->
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                            Status: <br /><span class="badge 
+                                {% if message.status == 'attended' %}
+                                    bg-success
+                                {% elif message.status == 'ignored' %}
+                                    bg-danger
+                                {% elif message.status == 'pending' %}
+                                    bg-warning
+                                {% endif %}
+                                text-light mb-3">{{ message.status | title }}</span>
+                        
+                        <h5>Sender Info:</h5>
+
+                        <p class="text-muted mb-2">
+                        <strong>Sender:</strong> {{ message.name }}<br />
+                        <strong>Sender Phone:</strong> {{ message.phone }}<br />
+                        <strong>Sender Email:</strong> {{ message.email }}<br />
+                        </p>
+                        <h5>Message Detail:</h5>
+
+                        <p class="text-muted mb-2">
+                        {{ message.message | linebreaks }}
+                        </p>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-4">
+                                    <h5>Date Recieved</h5>
+                                    <p>{{ message.created_at|date }} <small class="text-muted">{{ message.created_at|time }}</small></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if message.status != 'attended' %}
+                        
+                            <a href="{% url 'contacts:contact-message-update' message.id %}" class="btn btn-sm btn-primary">Update Status</a>
+                            <a href="{% url 'contacts:contact-message-delete' message.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+    {% endif %}
+
+{% endblock content %}

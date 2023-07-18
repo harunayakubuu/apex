@@ -1,0 +1,66 @@
+{% extends "back-base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} All Users{% endblock title %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <!-- <li class="breadcrumb-item"><a href="#">CRM</a></li> -->
+                        <li class="breadcrumb-item active">All Users</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">All Users
+                    
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="card">
+            <div class="card-body">
+
+                <table id="scroll-horizontal-datatable" class="table w-100 nowrap">
+                <thead>
+                    <tr>
+                        <th>SN.</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Full-name</th>
+                        <th>User Type</th>
+                        <th>Status</th>
+                        <th>Date Joined</th>
+                        <th>Last Login</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in all_users %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="{% url 'accounts:user-details' user.id %}">{{ user.username }}</a></td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.get_full_name }}</td>
+                        <td>{% if user.is_organisor %} Agency {% elif user.is_agent %}Agent {% elif user.is_client %} Customer {% endif %}</td>
+                        <td>{% if user.is_active %}Active{% else %}Not active{% endif %}</td>
+                        <td>{{ user.date_joined | date }}</td>
+                        
+                        <td>{{ user.last_login | date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}}

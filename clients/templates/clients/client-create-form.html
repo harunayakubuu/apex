@@ -1,0 +1,110 @@
+{% extends 'back-base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Client Create Form{% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:profile' %}">Profile</a></li>
+                        <li class="breadcrumb-item active">Client Form </li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Client Form </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% include 'includes/alerts.html' %}
+        <div class="col-12">
+            {% if request.user.is_authenticated %}
+                {% if request.user.is_client or request.user.is_organisor %}
+                    {% if not request.user.client %}
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="POST" enctype="multipart/form-data" novalidate>{% csrf_token %} 
+                                    <div class="row mb-3">
+                                        <div class="row">
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ user_form.first_name|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ user_form.middle_name|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ user_form.last_name|as_crispy_field }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ user_form.email|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ user_form.phone_number|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                    
+                                    
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ client_form.state|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ client_form.home_address|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ client_form.business_address|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ client_form.gender|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                            <div class="mb-3">
+                                                {{ client_form.profile_picture|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                        
+                                        <br />
+                                    </div>
+                                    
+                                    <div class="float-end">
+                                        <button type="submit" class="btn btn-sm btn-success"><i class='uil uil-message me-1'></i>Save</button>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    {% else %}
+                        <h4>You already have an existing profile. Kindly <a href="{% url 'clients:client-update' %}">update</a> here. </h4>
+                    {% endif %}
+                {% else %}
+                    <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+                {% endif %}
+
+            {% endif %}
+        </div>
+    </div>       
+        
+{% endblock content %}

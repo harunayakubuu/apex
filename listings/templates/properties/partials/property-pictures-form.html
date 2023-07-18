@@ -1,0 +1,20 @@
+{% load crispy_forms_tags %}
+
+<form method="post" enctype="multipart/form-data">{% csrf_token %}                            
+    <div class="row mb-2">
+        <div class="col-lg-4 col-sm-3 col-md-3">
+            {{ form.name|as_crispy_field }}
+        </div>
+        <div class="col-lg-4 col-sm-3 col-md-3">
+            {{ form.picture|as_crispy_field }}
+        </div>
+
+        <div class="col-lg-3 col-sm-3 col-md-3 mt-2 align-self-end">
+            <button class="btn btn-danger">Submit</button>
+        </div>
+    </div>
+    <!--<div>
+        <button type="submit" class="btn btn-secondary block">Add</button>
+        <button type="submit" class="btn btn-success">Save</button>
+    </div>-->
+</form>

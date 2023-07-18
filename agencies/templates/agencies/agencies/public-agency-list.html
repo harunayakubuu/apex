@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}Agencies List{% endblock title %}
+
+{% block content %}
+
+    <div class="page-title">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            
+            <h2 class="ipt-title">All Agencies</h2>
+            <span class="ipn-subtitle">Lists of Agencies</span>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <section class="bg-light">
+      <div class="container">
+
+        <div class="col-lg-12 col-md-12">
+				  <h3>Agencies</h3>
+			  </div>
+
+        {% if agencies_obj %}
+        <div class="row">
+          
+          {% for agency in agencies_obj %}
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="agents-grid">
+              
+              <div class="agents-grid-wrap">
+                
+                <div class="fr-grid-thumb">
+                  <a href="{{ agency.get_absolute_url }}">
+                    <img {% if agency.logo.url %} src="{{ agency.logo.url }}" {% else %} src="{% static 'assets/img/agent/no-display-picture.png' %}" {% endif %} class="img-fluid mx-auto" alt="" />
+                  </a>
+                </div>
+                
+                <div class="fr-grid-deatil">
+                  <div class="fr-grid-deatil-flex">
+                    <h5 class="fr-can-name"><a href="{{ agency.get_absolute_url }}">{{ agency.name }}</a></h5>
+                    <span class="agent-property">{{ agency_listings_count }} Properties</span>
+                  </div>
+                  <div class="fr-grid-deatil-flex-right">
+                    <!--<div class="agent-email"><a href="#"><i class="ti-email"></i></a></div>-->
+                  </div>
+                </div>
+                
+              </div>
+              
+              <div class="fr-grid-info">
+                <ul>
+                  <li><strong>Phone:</strong>{{ agency.phone_number }}</li>
+                  <!--
+                  <li>
+                    <div class="fr-can-rating">
+                      <i class="fas fa-star filled"></i>
+                      <i class="fas fa-star filled"></i>
+                      <i class="fas fa-star filled"></i>
+                      <i class="fas fa-star filled"></i>
+                      <i class="fas fa-star"></i>
+                      <span class="reviews_text">(42 Reviews)</span>
+                    </div>
+                  </li>
+                  -->
+                </ul>
+              </div>
+              
+              <div class="fr-grid-footer">
+                <div class="fr-grid-footer-flex">
+                  <span class="fr-position"><i class="lni-map-marker"></i>{{ agency.address }}, {{ agency.state }}</span>
+                </div>
+                <div class="fr-grid-footer-flex-right">
+                  <a href="{{ agency.get_absolute_url }}" class="prt-view" tabindex="0">View</a>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+        
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            {% if agencies_obj.has_other_pages %}
+              <ul class="pagination p-center">
+                {% if agencies_obj.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="Previous">
+                      <!--<span class="ti-arrow-left"></span>-->
+                      <span> &#8810; </span>
+                    </a>
+                    <a class="page-link" href="?page={{ agencies_obj.previous_page_number }}" aria-label="Previous">
+                      <!--<span class="ti-arrow-left"></span>-->
+                      <span class=""> &lt; </span>
+                    </a>
+                  </li>
+                {% endif %}
+                  
+                <li class="page-item"><span style="width:150px">Page {{ agencies_obj.number }} of {{ agencies_obj.paginator.num_pages }} </span></li>
+                  
+                {% if agencies_obj.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ agencies_obj.next_page_number }}" aria-label="Next">
+                      <span> &#62; </span>
+                      <!--<span class="sr-only">Next</span>-->
+                    </a>
+                    <a class="page-link" href="?page={{ agencies_obj.paginator.num_pages }}" aria-label="Next">
+                      <!--<span class="ti-arrow-right"></span>-->
+                      <span> &#8811; </span>
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            {% endif %}
+          </div>
+
+          {% else %}
+              <h3>No Agencies Available.</h3>
+          {% endif %}
+			</div>
+        
+    </div>	
+  </section>
+{% endblock content %}

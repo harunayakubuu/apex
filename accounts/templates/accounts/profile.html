@@ -1,0 +1,434 @@
+{% extends 'back-base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if request.user.get_full_name %}
+        {{ request.user.get_full_name }}'s
+    {% else %}
+        {{ request.user.username | title }}'s
+    {% endif %} Profile
+{% endblock title %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">
+                            {% if request.user.get_full_name %}
+                                {{ request.user.get_full_name }}'s
+                            {% else %}
+                                {{ request.user.username | title }}'s
+                            {% endif %} Profile
+                        </li>
+                    </ol>
+                </div>
+                <h4 class="page-title">
+                    {% if request.user.get_full_name %}
+                        {{ request.user.get_full_name }}'s
+                    {% else %}
+                        {{ request.user.username | title }}'s
+                    {% endif %} Profile
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/alerts.html' %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card bg-light">
+                <div class="card-body profile-user-box">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="avatar-lg">
+                                        {% if request.user.is_client %}
+                                            {% if request.user.client.profile_picture %}
+                                                <img src="{{ request.user.client.profile_picture.url }}" alt="" class="rounded-circle img-thumbnail">
+                                            {% else %}
+                                                <img src="{% static 'assets/img/users/no-picture.png' %}" alt="" class="rounded-circle img-thumbnail">
+                                            {% endif %}
+                                        {% elif request.user.is_agent %}
+                                            {% if request.user.agent.profile_picture %}
+                                                <img src="{{ request.user.agent.profile_picture.url }}" alt="" class="rounded-circle img-thumbnail">
+                                            {% else %}
+                                                <img src="{% static 'assets/img/users/no-picture.png' %}" alt="" class="rounded-circle img-thumbnail">
+                                            {% endif %}
+                                        {% elif request.user.is_organisor %}
+                                            {% if request.user.profile.agency %}
+                                                {% if request.user.profile.agency.logo %}
+                                                    <img src="{{ request.user.profile.agency.logo.url }}" alt="" class="rounded-circle img-thumbnail">
+                                                {% endif %}
+                                            {% else %}
+                                                <img src="{% static 'assets/img/users/no-picture.png' %}" alt="" class="rounded-circle img-thumbnail">
+                                            {% endif %}
+                                        {% else %}
+                                            <img src="{% static 'assets/img/users/no-picture.png' %}" alt="" class="rounded-circle img-thumbnail">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        <h4 class="mt-1 mb-1">
+                                        {% if request.user.is_authenticated %}
+                                            
+                                            {% if request.user.get_full_name %}
+                                                {{ request.user.get_full_name }}
+                                            {% else %}
+                                                {{ request.user.username | title }}
+                                            {% endif %}
+                                            
+                                            {% if request.user.is_client %}
+                                                {% if request.user.client %}
+                                                    {% if request.user.client.is_verified %}
+                                                        <i class="mdi mdi-check-decagram text-primary"></i>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% elif request.user.is_agent %}
+                                                {% if request.user.agent %}
+                                                    {% if request.user.agent.is_verified %}
+                                                        <i class="mdi mdi-check-decagram text-primary"></i>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% elif request.user.is_organisor %}
+                                                {% if request.user.organisor %}
+                                                    {% if request.user.organisor.is_verified %}
+                                                        <i class="mdi mdi-check-decagram text-primary"></i>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}                                                
+                                        {% endif %}
+                                        </h4>
+                                        
+                                        <p class="font-13">
+                                            {% if request.user.is_authenticated %}
+                                                {% if request.user.is_client %}
+                                                    {% if request.user.client %}
+                                                        {% if request.user.client.is_verified %}
+                                                            Verified
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    Client
+                                                {% elif request.user.is_agent %}
+                                                    {% if request.user.agent %}
+                                                        {% if request.user.agent.is_verified %}
+                                                            Verified
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    Agent
+                                                {% elif request.user.is_organisor %}
+                                                    {% if request.user.profile.agency %}
+                                                        {% if request.user.agency.is_verified %}
+                                                            Verified
+                                                            <i class="mdi mdi-check-decagram text-primary"></i>
+                                                        {% endif %}
+                                                        Agency: {{ request.user.profile.agency }}
+                                                    {% else %}
+                                                        Agency
+                                                    {% endif %}
+                                                {% else %}
+                                                    Super Admin
+                                                {% endif %}
+                                            {% endif %}
+                                        </p>
+
+                                        <ul class="mb-0 list-inline">
+                                            <li class="list-inline-item me-3">
+                                                <h5 class="mb-1">Joined</h5>
+                                                <p class="mb-0 font-13">{{ request.user.date_joined }}</p>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <h5 class="mb-1">Last Login</h5>
+                                                <p class="mb-0 font-13">{{ request.user.last_login }}</p>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="text-center mt-sm-0 mt-3 text-sm-end">
+                                <a type="button" class="btn btn-info"
+                                    {% if request.user.is_agent %}
+                                        {% if not request.user.agent %}
+                                            href="{% url 'agents:agent-create' %}"
+                                        {% else %}
+                                            href="{% url 'agents:agent-update' %}"
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% if request.user.is_client %}
+                                        {% if not request.user.client %}
+                                            href="{% url 'clients:client-create' %}"
+                                        {% else %}
+                                            href="{% url 'clients:client-update' %}"
+                                        {% endif %}
+                                    {% endif %}
+
+                                     {% if request.user.is_organisor %}
+                                        {% if not request.user.profile.agency %}
+                                            href="{% url 'agencies:agency-create' %}"
+                                        {% else %}
+                                            href="{% url 'agencies:agency-update' request.user.profile.agency.slug %}"
+                                        {% endif %}
+                                    {% endif %}
+                                >
+                                    <i class="mdi mdi-account-edit me-1"></i> Edit Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% if request.user.is_client or request.user.is_organisor %}
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card tilebox-one">
+                    <div class="card-body">
+                        <i class="mdi mdi-home-city float-end text-muted"></i>
+                        <h6 class="text-muted text-uppercase mt-0">My Properties</h6>
+                        <h2 class="m-b-20">
+                            {% for listing in listings %}
+                                {% if listing.listing_owner.user == request.user %}
+                                    {{ listing.count }}
+                                {% endif %}
+                            {% endfor %}
+                        </h2>
+                        <!--<span class="badge bg-primary"> +11% </span> <span class="text-muted">From previous period</span>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="card tilebox-one">
+                    <div class="card-body">
+                        <i class="dripicons-question float-end text-muted"></i>
+                        <h6 class="text-muted text-uppercase mt-0">My Enquiries</h6>
+                        <h2 class="m-b-20"><span>{{ enquiries.count }}</span></h2>
+                        <!--<span class="badge bg-danger"> -29% </span> <span class="text-muted">From previous period</span>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="card tilebox-one">
+                    <div class="card-body">
+                        <i class="mdi mdi-account-box float-end text-muted"></i>
+                        <h6 class="text-muted text-uppercase mt-0">My Contacts</h6>
+                        <h2 class="m-b-20">{{ user_contacts.count }}</h2>
+                        <!--<span class="badge bg-primary"> +89% </span> <span class="text-muted">Last year</span>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mt-0 mb-3">Information</h4>
+
+                    <hr/>
+
+                    <div class="text-start">
+                        <p class="text-muted"><strong>Full Name:</strong> <span class="ms-2">{{ request.user.get_full_name }}</span></p>
+
+                        <p class="text-muted"><strong>Mobile:</strong><span class="ms-2">{{ request.user.phone_number }}</span></p>
+
+                        <p class="text-muted"><strong>Email:</strong> <span class="ms-2">{{ request.user.email }}</span></p>
+                        {% if request.user.is_client %}
+                            <p class="text-muted"><strong>State:</strong>
+                                <span class="ms-2">{{ request.user.client.state }}</span>
+                            </p>
+                            <p class="text-muted"><strong>Home Address:</strong>
+                                <span class="ms-2"> {{ request.user.client.home_address }}</span>
+                            </p>
+                            <p class="text-muted"><strong>Business Address:</strong>
+                                <span class="ms-2"> {{ request.user.client.business_address }}</span>
+                            </p>
+                        {% endif %}
+                        
+                        {% if request.user.is_organisor %}
+                            <p class="text-muted"><strong>State:</strong>
+                                <span class="ms-2"> {{ request.user.organisor.state }}</span>
+                            </p>
+                            <p class="text-muted"><strong>LGA:</strong>
+                                <span class="ms-2"> {{ request.user.organisor.local_government_area|upper }}</span>
+                            </p>
+                            <p class="text-muted"><strong>Home Address:</strong>
+                                <span class="ms-2"> {{ request.user.organisor.home_address }}</span>
+                            </p>
+                            <p class="text-muted"><strong>Business Address:</strong>
+                                <span class="ms-2"> {{ request.user.organisor.business_address }}</span>
+                            </p>
+                        
+                        {% endif %}
+                        
+                        {% if request.user.is_agent %}
+                            <p class="text-muted"><strong>Additional phone number :</strong>
+                                <span class="ms-2"> {{ request.user.agent.additional_phone_number }}</span>
+                            </p>
+                             <p class="text-muted"><strong>Hire date:</strong>
+                                <span class="ms-2"> {{ request.user.agent.hire_date }}</span>
+                            </p>
+
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-3">Messages</h4>
+
+                    <div class="inbox-widget">
+                        <!--<div class="inbox-item">
+                            <div class="inbox-item-img"><img src="assets/images/users/avatar-2.jpg" class="rounded-circle" alt=""></div>
+                            <p class="inbox-item-author">Tomaslau</p>
+                            <p class="inbox-item-text">I've finished it! See you so...</p>
+                            <p class="inbox-item-date">
+                                <a href="#" class="btn btn-sm btn-link text-info font-13"> Reply </a>
+                            </p>
+                        </div>-->
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% if request.user.is_client or request.user.is_organisor %}
+        {% if request.user.client %}
+            {% if listings %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>My Properties</h4>
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Property</th>
+                                            <th>State</th>
+                                            <th>Location</th>
+                                            <th>Views</th>
+                                            <th>Enquiries</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for listing in listings %}
+                                            {% if listing.listing_owner.user.id == request.user.id %}
+                                                <tr>
+                                                    <td>{{ listing.name }}</td>
+                                                    <td>{{ listing.state }}</td>
+                                                    <td>{{ listing.location }}</td>
+                                                    <td>{{ listing.view_count }}</td>
+                                                    <td>{{ listing.enquiry_count }}</td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+
+    {% if enquiries %}
+        <h4>My Enquiries</h4>
+        <table class="table table-centered mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Property</th>
+                    {% comment %} <th>Property Address</th>
+                    <th>Location</th> {% endcomment %}
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for enquiry in enquiries %}
+                <tr>
+                    <td>{{ enquiry.listing }}</td>
+                    {% comment %} <td>{{ enquiry.listing.address }}</td>
+                    <td>{{ enquiry.listing_location }}  </td> {% endcomment %}
+                    <td>{{ enquiry.created_at|date }}  </td>
+                    <td>{% if enquiry.is_contacted %}<i class="mdi mdi-circle text-success"></i>  Closed{% else %}<i class="mdi mdi-circle text-warning"></i> Pending{% endif %}</td>
+                </tr>
+                {% empty %}
+                    You have no enquiries records.
+                {% endfor %}        
+            </tbody>
+        </table>
+    {% endif %}
+
+    
+    {% if emergency_contacts %}
+        <h4>My Contacts</h4>
+        <table class="table table-centered mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Relationship</th>
+                    <th>Next of Kin Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in emergency_contacts %}
+                <tr>
+                    <td>{{ contact.full_name }}</td>
+                    <td>{{ contact.phone }}</td>
+                    <td>{{ contact.email }}  </td>
+                    <td>{{ contact.relationship | title }}  </td>
+                    <td>{% if contact.next_of_kin %}<i class="mdi mdi-circle text-success"></i>  Next of Kin{% else %}<i class="mdi mdi-circle text-warning"></i> Not next of Kin{% endif %}</td>
+                </tr>
+                {% empty %}
+                    You have no enquiries records.
+                {% endfor %}        
+            </tbody>
+        </table>
+    {% endif %}
+
+
+    {% if request.user.is_client or request.user.is_organisor %}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="">
+                            <a href="#" class="btn btn-lg font-16 btn-danger" id="account-delete"><i class="mdi mdi-delete-circle"></i>
+                                Delete account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}
+

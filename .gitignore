@@ -1,0 +1,23 @@
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+/media
+# /static
+
+
+# Environments 
+.env 
+.venv 
+env/
+venv/
+ENV/
+env.bak/ 
+venv.bak/
+# *.txt
+postgresql_config.txt
+Notes.txt
+# .template.env
+*.code

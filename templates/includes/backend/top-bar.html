@@ -1,0 +1,154 @@
+{% load static %}
+{% load i18n %}
+
+{% if request.user.is_authenticated %}
+    <div class="navbar-custom">
+        <ul class="list-unstyled topbar-menu float-end mb-0">
+            
+            <li class="notification-list">
+                <a class="nav-link end-bar-toggle" href="{% url 'pages:index' %}">
+                    <i class="dripicons-dots-3 noti-icon"></i>
+                    Go to Website
+                </a>
+            </li>
+            
+            <li class="dropdown notification-list">
+                <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
+                    aria-expanded="false">
+                    <span class="account-user-avatar"> 
+                        <img
+                            {% if request.user.is_client%}
+                                {% if request.user.client %}
+                                    {% if request.user.client.profile_picture %}
+                                        src="{{ request.user.client.profile_picture.url }}"
+                                    {% else %}
+                                        src="{% static 'assets/img/users/no-picture.png' %}"
+                                    {% endif %}
+                                {% else %}
+                                        src="{% static 'assets/img/users/no-picture.png' %}"
+                                {% endif %}
+                            
+                            {% elif request.user.is_agent %}
+                                {% if request.user.agent %}
+                                    {% if request.user.agent.profile_picture %}
+                                        src="{{ request.user.agent.profile_picture.url }}"
+                                    {% else %}
+                                        src="{% static 'assets/img/users/no-picture.png' %}"
+                                    {% endif %}
+                                {% else %}
+                                    src="{% static 'assets/img/users/no-picture.png' %}"
+                                {% endif %}
+
+                            {% elif request.user.is_organisor %}
+                                {% if request.user.profile.agency %}
+                                    {% if request.user.profile.agency.logo %}
+                                        src="{{ request.user.profile.agency.logo.url }}"
+                                    {% else %}
+                                        src="{% static 'assets/img/users/no-picture.png' %}"
+                                    {% endif %}
+                                {% else %}
+                                    src="{% static 'assets/img/users/no-picture.png' %}"
+                                {% endif %}
+
+                            {% else %}
+                                src="{% static 'assets/img//users/no-picture.png' %}"
+                            {% endif %}
+                        alt="user-image" class="rounded-circle">
+                    </span>
+                    <span>
+                        <span class="account-user-name">
+
+                                {% if request.user.get_full_name %}
+                                    {{ request.user.get_full_name | title }}
+                                {% else %}
+                                    {{ request.user.username | title }}
+                                {% endif %}
+                        </span>
+                        
+                        <span class="account-position">
+                            {% if request.user.is_organisor %}
+                                {% if request.user.profile.agency %}
+                                    {{ request.user.profile.agency }}
+                                {% else %}
+                                    Agency
+                                {% endif %}
+                            {% elif request.user.is_agent %}
+                                Agent
+                            {% elif request.user.is_client %}
+                                Client
+                            {% else %}
+                                Super Admin
+                            {% endif %}
+                        </span>
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
+                    <!-- item-->
+                    <div class=" dropdown-header noti-title">
+                        <h6 class="text-overflow m-0">Welcome <em>{{ request.user.username }}!</em></h6>
+                    </div>
+
+                    <a href="{% url 'accounts:profile' %}" class="dropdown-item notify-item">
+                        <i class="mdi mdi-account me-1"></i>
+                        <span>My Profile</span>
+                    </a>
+
+                    <a class="dropdown-item notify-item"
+                        {% if request.user.is_organisor %}
+                            {% if request.user.organisor%}
+                                href="{% url 'agencies:organisor-update' %}"
+                            {% else %}
+                                href="{% url 'agencies:organisor-create' %}"
+                            {% endif %}
+                            {% if request.user.agency %}
+                                href="{% url 'agencies:agency-update' %}"
+                            {% else %}
+                                href="{% url 'agencies:agency-create' %}"
+                            {% endif %}
+
+
+                        {% elif request.user.is_agent %}
+                            {% if not request.user.agent %}
+                                href="{% url 'agents:agent-create' %}"
+                            {% else %}
+                                href="{% url 'agents:agent-update' %}"
+                            {% endif %}
+                        
+                        {% elif request.user.is_client %}
+                            {% if not request.user.client %}
+                                href="{% url 'clients:client-create' %}"
+                            {% else %}
+                                href="{% url 'clients:client-update' %}"
+                            {% endif %}
+                        {% endif %}
+                    >
+                        <i class="mdi mdi-account-edit me-1"></i>
+                        <span>Edit Profile</span>
+                    </a>
+
+                    {% if request.user.is_organisor %}
+                        <a class="dropdown-item notify-item"
+                            {% if not request.user.profile.agency %}
+                                href="{% url 'agencies:agency-create' %}"
+                            {% else %}
+                                href="{% url 'agencies:agency-update' slug=request.user.profile.agency.slug %}"
+                            {% endif %}>
+                        <i class="mdi mdi-card-account-details-star-outline me-1"></i>
+                        <span>Update Agency Profile</span>
+                    </a>
+                    {% endif %}
+
+                    <a href="{% url 'logout' %}" class="dropdown-item notify-item">
+                        <i class="mdi mdi-logout me-1"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </li>
+        </ul>
+
+        <button class="button-menu-mobile open-left">
+            <i class="mdi mdi-menu"></i>
+        </button>
+
+    </div>
+{% endif %}

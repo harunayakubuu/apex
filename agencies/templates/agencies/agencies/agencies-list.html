@@ -1,0 +1,86 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Agencies{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Agencies</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">All Agencies ({{ agencies.count }})
+                    <!--<a href="{# url 'agencies:agency-create' #}" class="btn btn-success btn-sm ms-3">New Agency</a>-->
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.is_superuser %}
+        <div class="row">
+            {% if agencies %}
+                {% for agency in agencies %}
+                    <div class="col-md-6 col-xxl-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="dropdown float-end">
+                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="mdi mdi-dots-horizontal"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a href="{% url 'agencies:agency-details' agency.slug %}" class="dropdown-item">Details</a>
+                                        <a href="{% url 'agencies:admin-agency-update' agency.slug %}" class="dropdown-item">Edit</a>
+                                        <a href="{% url 'agencies:agency-delete' agency.pk %}" class="dropdown-item">Delete</a>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <img src="{% if agency.logo %} {{ agency.logo.url }}{% else %} {% static 'images/01.png' %} {% endif %}" class="rounded-circle avatar-md img-thumbnail" alt="friend">
+                                    <h4 class="mt-3 my-1">{{ agency.name }} {% if agency.is_verified %}<i class="mdi mdi-check-decagram text-primary"></i>{% endif %}</h4>
+                                    <p class="mb-0 text-muted"><i class="mdi mdi-account me-1"></i>Manager: <strong>{{ agency.profile.user.username }}</strong></p>
+                                    <hr class="bg-dark-lighten my-3">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h5 class="mt-3 fw-semibold text-muted"><b>0</b> Properties</h5>
+                                        </div>
+                                        <div class="col-6">
+                                            <h5 class="mt-3 fw-semibold text-muted"><b>0</b> Agents</h5>
+                                        </div>
+                                    </div>
+                                <!--
+                                    <div class="row mt-3">
+                                        <div class="col-4">
+                                            <a href="#" class="btn w-100 btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ agency.whatsapp }}"><i class="mdi mdi-whatsapp"></i></a>
+                                        </div>
+                                        <div class="col-4">
+                                            <a href="#" class="btn w-100 btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ agency.phone_number }}"><i class="mdi mdi-phone"></i></a>
+                                        </div>
+                                        <div class="col-4">
+                                            <a href="#" class="btn w-100 btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ agency.email }}"><i class="mdi mdi-email-outline"></i></a>
+                                        </div>
+                                    </div>
+                                -->
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- End col -->
+                {% endfor %}
+
+            {% else %}
+                <p>
+                    No Agencies Available
+                </p>
+            {% endif %}
+
+            
+        </div> <!-- End row -->
+    {% else %}
+        <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+    {% endif %}
+    
+{% endblock content %}

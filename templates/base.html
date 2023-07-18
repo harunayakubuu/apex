@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+	<head>
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>{% block title %}{% endblock title %} | Apex</title>
+        <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet">
+		<link href="{% static 'assets/css/colors.css' %}" rel="stylesheet">
+		<link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" />
+    </head>
+	
+    <body class="blue-skin">
+        <div id="preloader"><div class="preloader"><span></span><span></span></div></div>
+        <div id="main-wrapper">
+
+			<div class="header header-light change-logo">
+				<div class="container">
+					<nav id="navigation" class="navigation navigation-landscape">
+						<div class="nav-header">
+							<a class="nav-brand" href="{% url 'pages:index' %}">
+								<img src="{% static 'assets/img/navbar-logo.png' %}" class="logo" alt="Brand" />
+							</a>
+							<div class="nav-toggle"></div>
+						</div>
+						<!--<div class="nav-header">
+							<a class="nav-brand static-logo" href="#"><img src="{% static 'assets/img/logo-dark.png' %}" class="logo" alt="" /></a>
+							<a class="nav-brand fixed-logo" href="#"><img src="{% static 'assets/img/logo-light-new.png' %}" class="logo" alt="" /></a>
+							<div class="nav-toggle"></div>
+						</div>-->
+						<div class="nav-menus-wrapper" style="transition-property: none;">
+							<ul class="nav-menu">
+
+								<li {% if '/' == request.path %} class="active" {% else %} {% endif %}>
+									<a href="{% url 'pages:index' %}">Home</a>
+								</li>
+
+								<li {% if 'about' in request.path %} class="active" {% else %} {% endif %}>
+									<a href="{% url 'pages:about' %}">About Us</a>
+								</li>
+
+								<li {% if 'properties/all' in request.path %} class="active" {% else %}{% endif %}>
+									<a href="{% url 'listings:public-properties-list' %}">Properties</a>
+								</li>
+
+								<li {% if 'faqs' in request.path %} class="active" {% else %}{% endif %}>
+									<a href="{% url 'faqs:faqs' %}">FAQs</a>
+								</li>
+
+								<li {% if 'blog/posts' in request.path %} class="active" {% else %} {% endif %}>
+									<a href="{% url 'blog:public-posts' %}">Blog</a>
+								</li>
+							
+								
+								<li {% if 'agents' in request.path or 'agencies/p/list' in request.path %} class="active" {% else %} {% endif %}>
+									<a href="JavaScript:Void(0);">Agencies &amp; Agents<span class="submenu-indicator"></span></a>
+									<ul class="nav-dropdown nav-submenu">
+										<li><a href="{% url 'agents:public-agents-list' %}">Agents</a></li>                                                                      
+										<li><a href="{% url 'agencies:public-agency-list' %}">Agencies List</a></li>
+									</ul>
+								</li>
+								
+								
+								<li {% if 'contact/form' in request.path %} class="active" {% else %} {% endif %}>
+									<a href="{% url 'contacts:contact-form' %}">Contact Us</a>
+								</li>
+								
+							</ul>
+							
+							<ul class="nav-menu nav-menu-social align-to-right">
+								{% if not request.user.is_authenticated %}
+									<li {% if 'login' in request.path %} class="active" {% else %} {% endif %}>
+										<a href="{% url 'login' %}" class="text-success">
+										<i class="fas fa-user-circle mr-2"></i>Sign in</a>
+									</li>
+									<li class="add-listing light">
+										<a href="{% url 'pages:signup' %}"><img src="{% static 'assets/img/user-dark.svg' %}" width="12" alt="" class="mr-2" />Register</a>
+										<!--<a href="{# url 'client-signup' #}"><img src="{% static 'assets/img/user-dark.svg' %}" width="12" alt="" class="mr-2" />Register</a>-->
+									</li>
+								{% else %}
+									<li class="add-listing light">
+										<a href="{% url 'accounts:dashboard' %}"><img src="{% static 'assets/img/user-dark.svg' %}" width="12" alt="" class="mr-2" />Account</a>
+									</li>
+									<li>
+										<a href="{% url 'logout' %}"><img src="{% static 'assets/img/off.svg' %}" class="mr-2" width="17" alt="">Sign out</a>
+									</li>
+								{% endif %}
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</div>
+			
+			{{ redirect_to_login_immediately }}
+			{% block content %}
+			
+			{% endblock content %}
+			
+			<footer class="dark-footer skin-dark-footer">
+				<div>
+					<div class="container">
+						<div class="row">
+							
+							<div class="col-lg-6 col-md-6">
+								<div class="footer-widget">
+									<img src="{% static 'assets/img/footer-logo.png' %}" class="img-footer" alt="" />
+									<div class="footer-add">
+										<p>No. 1 Fatima House, Liman Street, Opposite NNPC Filling Station, Rijiyar Zaki, Kano.</p>
+										<p><span><i class="lni-phone-handset"></i> 07056038969, 09029172566 </span></p>
+										<p><span><i class="ti-email"></i> info@apexproperties.ng</p>
+									</div>
+									
+								</div>
+							</div>		
+							<div class="col-lg-3 col-md-3">
+								<div class="footer-widget">
+									<h4 class="widget-title">Navigations</h4>
+									<ul class="footer-menu">
+										<li><a href="{% url 'pages:about' %}">About Us</a></li>
+										<li><a href="{% url 'faqs:faqs' %}">FAQs</a></li>
+										<li><a href="{% url 'contacts:contact-form' %}">Contact</a></li>
+										<li><a href="{% url 'blog:public-posts' %}">Blog</a></li>
+									</ul>
+								</div>
+							</div>
+									
+							<div class="col-lg-3 col-md-3">
+								<div class="footer-widget">
+									<h4 class="widget-title">Pages</h4>
+									<ul class="footer-menu">
+										<li><a href="{% url 'pages:terms-and-conditions' %}">Terms &amp; Conditions</a></li>
+										<li><a href="{% url 'pages:privacy-policy' %}">Privacy Policy</a></li>
+										<li><a href="{% url 'login' %}">Log in</a></li>
+										<!--<li><a href="#">Nightlife</a></li>
+										<li><a href="#">Villas</a></li>-->
+									</ul>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+				</div>
+				
+				<div class="footer-bottom">
+					<div class="container">
+						<div class="row align-items-center">
+							
+							<div class="col-lg-6 col-md-6">
+								<p class="mb-0">&copy; 2022 - {% now 'Y' %} Apex EMP. All rights reserved</p>
+							</div>
+							
+							<div class="col-lg-3 col-md-3">
+								<ul class="footer-bottom-social">
+									<li><a href="#"><i class="ti-facebook"></i></a></li>
+									<li><a href="#"><i class="ti-whatsapp"></i></a></li>
+									<li><a href="#"><i class="ti-twitter"></i></a></li>
+									<li><a href="#"><i class="ti-instagram"></i></a></li>
+									<!--<li><a href="#"><i class="ti-snapchat"></i></a></li>
+									<li><a href="#"><i class="ti-linkedin"></i></a></li>
+									-->
+								</ul>
+							</div>
+
+							<div class="col-lg-3 col-md-3">
+								<p class="mb-0">Powered By <a href="#07036188150">Integral Solutions</a></p>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</footer>
+			
+			<a id="back2Top" class="top-scroll" title="Back to top" href="#"><i class="ti-arrow-up"></i></a>
+			
+
+		</div>
+
+		<script src="{% static 'htmx.min.js' %}"></script>
+
+		<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+		<script src="{% static 'assets/js/popper.min.js' %}"></script>
+		<script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'assets/js/rangeslider.js' %}"></script>
+		<script src="{% static 'assets/js/select2.min.js' %}"></script>
+		<script src="{% static 'assets/js/jquery.magnific-popup.min.js' %}"></script>
+		<script src="{% static 'assets/js/slick.js' %}"></script>
+		<script src="{% static 'assets/js/slider-bg.js' %}"></script>
+		<script src="{% static 'assets/js/lightbox.js' %}"></script> 
+		<script src="{% static 'assets/js/imagesloaded.js' %}"></script>
+		 
+		<script src="{% static 'assets/js/custom.js' %}"></script>
+		<!-- Map -->
+		<script src="https://maps.google.com/maps/api/js?key="></script>
+		<script src="{% static 'assets/js/map_infobox.js' %}"></script>
+		<script src="{% static 'assets/js/markerclusterer.js' %}"></script> 
+		<script src="{% static 'assets/js/map.js' %}"></script>
+
+
+	</body>
+</html>

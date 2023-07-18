@@ -1,0 +1,347 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+
+{% block title %}{{ listing.name }}{% endblock title %}
+
+{% block content %}
+
+	{% include "includes/enquiry-form-modal.html" %}
+	{% include "includes/alerts.html" %}
+	
+	<section class="bg-title">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-11 col-md-12">
+			
+					<div class="property_block_wrap style-4">
+						<div class="prt-detail-title-desc">
+							<h3 class="text-light">{{ listing.listing_type }}</h3>
+							<span class="prt-types {% if listing.status == 'sale' %}sale{% elif listing.staus == 'rent' %}rent {% endif %}">For {% if listing.status == 'sale' %}Sale{% elif listing.staus == 'rent' %}Rent {% endif %}</span>
+							<h3 class="text-light">{{ listing.name }}, {% if listing.is_verified %} <span class="badge badge-md bg-info">Verified</span>{% endif %}</h3>
+							<span><strong><i class="lni-map-marker"></i> Location:</strong> {{ listing.address }}. {{ listing.location }}, {{ listing.city }}, {{ listing.state }} State.</span>
+							<h3 class="prt-price-fix">
+								&#8358;{% if listing.price < 1000000 %}{{ listing.price|intcomma }}{% else %}{{ listing.price|intword }} {% endif %}
+								{% if listing.status == 'rent' %}
+									<sub>/year</sub>
+								{% endif %}
+								<span class="badge badge-md {% if listing.price_status == 'fixed' %} bg-danger {% else %} bg-info {% endif %}" style="color: whitesmoke;">
+									{{ listing.price_status|upper }}
+								</span>
+							</h3>
+							<!--
+							<div class="pbwts-social">
+								<ul>
+									<li>Share:</li>
+									<li><a href="JavaScript:Void(0);"><i class="ti-facebook"></i></a></li>
+									<li><a href="JavaScript:Void(0);"><i class="ti-linkedin"></i></a></li>
+									<li><a href="JavaScript:Void(0);"><i class="ti-twitter"></i></a></li>
+									<li><a href="JavaScript:Void(0);"><i class="ti-instagram"></i></a></li>
+								</ul>
+							</div>
+							-->
+						</div>
+					</div>
+					
+				</div>	
+			</div>
+		</div>
+	</section>
+
+	<section class="gray-simple">
+		<div class="container">
+			<div class="row">
+				
+				<!-- property main detail -->
+				<div class="col-lg-8 col-md-12 col-sm-12">
+
+					<!-- Property pictures 1200x800 -->
+					{% if listing.listingpicture_set.all %}
+					<div class="property_block_wrap style-2">
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#clSev"  data-bs-target="#clSev" aria-controls="clOne" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Gallery</h4></a>
+						</div>
+						<div id="clSev" class="panel-collapse collapse" aria-expanded="true">
+							<div class="block-body">
+								<ul class="list-gallery-inline">
+									{% for pic in listing.listingpicture_set.all %}
+									<li>
+										<a href="{{ pic.picture.url }}" class="mfp-gallery"><img src="{{ pic.picture.url }}" class="img-fluid mx-auto" alt="" /></a>
+									</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					<!-- Property specifications -->
+					{% if listing.listingspecification_set.all %}
+					<div class="property_block_wrap style-2">
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#features" data-bs-target="#clOne" aria-controls="clOne" href="javascript:void(0);" aria-expanded="false"><h4 class="property_block_title">Detail & Features</h4></a>
+						</div>
+						<div id="clOne" class="panel-collapse collapse show" aria-labelledby="clOne" aria-expanded="true">
+							<div class="block-body">
+								<ul class="deatil_features">
+									{% for spec in listing.listingspecification_set.all %} 
+										<li><strong>{{ spec.attribute }}:</strong>{{ spec.value }}</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					<!-- Property description -->
+					{% if listing.description %}
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#dsrp" data-bs-target="#clTwo" aria-controls="clTwo" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Description</h4></a>
+						</div>
+						<div id="clTwo" class="panel-collapse collapse show" aria-expanded="true">
+							<div class="block-body">
+								<p>
+									{{ listing.description|linebreaks }}
+								</p>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					<!-- Additional features -->
+					{% if listing.listingadditionalfeature_set.all %}
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#amen"  data-bs-target="#clThree" aria-controls="clThree" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Ameneties</h4></a>
+						</div>
+						
+						<div id="clThree" class="panel-collapse collapse show" aria-expanded="true">
+							<div class="block-body">
+								<ul class="avl-features third color">
+									{% for feature in listing.listingadditionalfeature_set.all %}
+										{% for f in feature.feature.all %} 
+											<li>{{ f }}</li>
+										{% endfor %}
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					<!-- Property video -->
+					{% if listing.listingvideo.video.url %}
+					<div class="property_block_wrap style-2">
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#vid"  data-bs-target="#clFour" aria-controls="clFour" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Property video</h4></a>
+						</div>
+						<div id="clFour" class="panel-collapse collapse" aria-expanded="true">
+							<div class="block-body">
+								<div class="property_video">
+									<div class="thumb">
+										<video class="w100" controls allowfullscreen>
+											<source src="{{ listing.listingvideo.video.url }}" type="video/mp4">
+										</video>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					<!-- Property floors -->
+					{% if listing.listingfloor_set.all %}
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#floor"  data-bs-target="#clFive" aria-controls="clFive" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Floor Plan</h4></a>
+						</div>
+						
+						<div id="clFive" class="panel-collapse collapse" aria-expanded="true">
+							<div class="block-body">
+								<div class="accordion" id="floor-option">
+									{% for floor in listing.listingfloor_set.all %}
+									<div class="card">
+										<div class="card-header" id="{{ floor.id }}">
+											<h2 class="mb-0">
+												<button type="button" class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#{{ floor.floor }}" aria-controls="{{ floor.floor }}">{{ floor.floor|title }} Floor<span>740 sq ft</span></button>									
+											</h2>
+										</div>
+										<div id="{{ floor.floor }}" class="collapse" aria-labelledby="{{ floor.id }}" data-parent="#floor-option">
+											<div class="card-body">
+												<p>
+													<div class="row">
+														<div class="col-sm-3">Parlor: {{ floor.parlor }}</div>
+														<div class="col-sm-3">Rooms: {{ floor.number_of_rooms }}</div>
+														<div class="col-sm-3">Rest Rooms: {{ floor.rest_rooms }}</div>
+														<div class="col-sm-3">Store: {{ floor.store }}</div>
+													</div>
+												</p>
+												{% if floor.floor_plan %}
+													<img src="{{ floor.floor_plan.url }}" class="img-fluid" alt="" />
+												{% endif %}												
+											</div>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					<!-- Property Map -->
+					{% if listing.lat and listing.lon %}
+					<div class="property_block_wrap style-2">
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#loca"  data-bs-target="#clSix" aria-controls="clSix" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Location</h4></a>
+						</div>
+						<div id="clSix" class="panel-collapse collapse" aria-expanded="true">
+							<div class="block-body">
+								<div class="map-container">
+									<div id="singleMap" data-latitude="{{ listing.lat }}" data-longitude="{{ listing.lon }}" data-mapTitle="Our Location">
+										{{ map|safe }}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+										
+					<!-- Places nearby -->
+					{% if listing.listingnearby_set.all %}
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#nearby" data-bs-target="#clNine" aria-controls="clNine" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Places Nearby</h4></a>
+						</div>
+						
+						<div id="clNine" class="panel-collapse collapse" aria-expanded="true">
+							<div class="block-body">
+								<div class="nearby-wrap">
+									{% for category in nearby_categories_set %}
+										<div class="nearby_header">
+											<div class="nearby_header_first">
+												<h4> {{ category }} Around</h4>
+											</div>
+											<div class="nearby_header_last">
+												<div class="nearby_powerd">
+													Location
+												</div>
+											</div>
+										</div>
+									
+										{% for nearby in listing.get_nearbys_children %}
+											<div class="neary_section_list">
+												{% if nearby.category.name == category %}
+													<div class="neary_section mt-0">
+														<div class="neary_section_first">
+															<h4 class="nearby_place_title">{{ nearby.name }}{% if nearby.approximate_distance %}<small>({{ nearby.approximate_distance }}Km.)</small>{% endif %}</h4>
+														</div>
+														<div class="neary_section_last">
+															<small class="reviews-count">({{ nearby.location }})</small>
+														</div>
+													</div>
+												{% endif %}
+											</div>
+										{% endfor %}
+										
+										<hr />
+									{% endfor %}
+								</div>					
+							</div>
+						</div>
+						
+					</div>
+					{% endif %}
+
+				</div>
+				
+				<!-- property Sidebar -->
+				<div class="col-lg-4 col-md-12 col-sm-12">
+					
+					<!-- Like And Share -->
+					<!--
+					<div class="like_share_wrap b-0">
+						<ul class="like_share_list">
+							<li><a href="JavaScript:Void(0);" class="btn btn-likes" data-toggle="tooltip" data-original-title="Share"><i class="fas fa-share"></i>Share</a></li>
+							<li><a href="JavaScript:Void(0);" class="btn btn-likes" data-toggle="tooltip" data-original-title="Save"><i class="fas fa-heart"></i>Save</a></li>
+						</ul>
+					</div>
+					-->
+					
+					<div class="details-sidebar">
+					
+						<!-- Agent Detail -->
+						<div class="sides-widget">
+							<div class="sides-widget-header">
+								<div class="agent-photo">
+									{% if listing.listing_agent.user.agent.display_picture %}
+										<img src="{{ listing.listing_agent.user.agent.display_picture.url }}" alt=""></div>
+									{% else %}
+										<img src="{% static 'assets/img/avatar/no-picture.png' %}" alt=""></div>
+									{% endif %}
+									
+								<div class="sides-widget-details">
+									<h4>Agent: 
+										{% if listing.listing_agent %} 
+											{% if listing.listing_agent.user.get_full_name %} 
+												{{ listing.listing_agent.user.get_full_name | title }} 
+											{% else %} 
+												{{ listing.listing_agent.user.username | title }} 
+											{% endif %}
+										{% else %} 
+											None 
+										{% endif %}
+									</h4>
+									<span><i class="lni-question"></i>
+										<a href="JavaScript:Void(0);" data-bs-toggle="modal" data-bs-target="#enquiry-form-modal" class="btn btn-black btn-sm rounded">Send Enquiry</a>
+									</span>
+									<!--<span><i class="lni-phone-handset"></i>(91) 123 456 7895</span>-->
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+						<!--
+						<div class="sidebar-widgets">
+							
+							<h4>Featured Property</h4>
+							
+							<div class="sidebar_featured_property">
+								
+								List Sibar Property
+								<div class="sides_list_property">
+									<div class="sides_list_property_thumb">
+										<img src="https://via.placeholder.com/1200x800" class="img-fluid" alt="">
+									</div>
+									<div class="sides_list_property_detail">
+										<h4><a href="single-property-1.html">Loss vengel New Apartment</a></h4>
+										<span><i class="ti-location-pin"></i>Sans Fransico</span>
+										<div class="lists_property_price">
+											<div class="lists_property_types">
+												<div class="property_types_vlix sale">For Sale</div>
+											</div>
+											<div class="lists_property_price_value">
+												<h4>$4,240</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						-->
+					
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</section>
+{% endblock content %}

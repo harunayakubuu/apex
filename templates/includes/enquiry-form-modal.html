@@ -1,0 +1,83 @@
+
+{% load static %}
+
+<div class="modal fade signup" id="enquiry-form-modal" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="sign-up" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+        <div class="modal-content" id="sign-up">
+            <span class="mod-close" data-bs-dismiss="modal" aria-hidden="true"><i class="ti-close"></i></span>
+            <div class="modal-body">
+                <h3 class="modal-header-title">Send Enquiry</h3>
+                <div class="login-form">
+                    <form method="POST" action="{% url 'enquiries:enquiry_form' %}" novalidate>
+                        {% csrf_token %}
+
+                        {% if request.user.is_authenticated %}
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                        {% else %}
+                            <input type="hidden" name="user_id" value="0">
+                        {% endif %}
+
+                        <input type="hidden" name="agent_email" value="{{ listing.listing_agent.user.email }}">
+                        <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                        <input type="hidden" name="listing_slug" value="{{ listing.slug }}">
+                        <input type="hidden" name="listing_location" value="{{ listing.location }}">
+                        <input type="hidden" name="listing_address" value="{{ listing.address}}">
+                        
+                        <input type="hidden" name="listing_owner" value="{{ listing.listing_owner.user.id }}">
+
+                        <div class="row">
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="input-with-icon">
+                                        <input type="text" name="listing" class="form-control" value="{{ listing.name }}">
+                                        <i class="ti-unlock"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="input-with-icon">
+                                    <input type="text" class="form-control"  name="user_name" {% if request.user.is_authenticated %} {% if request.user.get_full_name %} value="{{ request.user.get_full_name }}" {% else %} value="{{ request.user.username }}" {% endif %} {% else %} placeholder="Your name" {% endif %} required>
+                                        <i class="ti-house"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="input-with-icon">
+                                        <input type="text" name="user_phone" class="form-control" {% if request.user.is_authenticated and request.user.phone_number %} value="{{ request.user.phone_number }}" {% else %} placeholder="Phone number" {% endif %} required>
+                                        <i class="lni-phone-handset"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="input-with-icon">
+                                        <input type="email" name="user_email" class="form-control" {% if request.user.is_authenticated and request.user.email %} value="{{ request.user.email }}" {% else %} placeholder="Email" {% endif %}>
+                                        <i class="ti-email"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="4" name="message" value="I'm interested in this property." required>I'm interested in this property.</textarea>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-black btn-md rounded full-width">Send Message</button>
+                        </div>                    
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Sales List{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:profile' %}">Profile</a></li>
+                        <li class="breadcrumb-item active">Sales List</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Sales List
+                    <a href="{% url 'sales:sale-create' %}" class="btn btn-success btn-sm">Add Sale</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            {% include 'includes/alerts.html' %}
+
+            {% if request.user.is_superuser or request.user.is_staff %}
+                {% for obj in object_list %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div>
+                                    {{ forloop.counter }}. <a href="{{ obj.get_absolute_url }}" class="card-body">{{ obj.transaction_id }}</a> {{ obj.created | date }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="card">
+                        <div class="card-body">
+                            <p>No Sale Records</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock content %}

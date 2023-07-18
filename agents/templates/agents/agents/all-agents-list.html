@@ -1,0 +1,68 @@
+{% extends "back-base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}All Agents{% endblock title %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <!-- <li class="breadcrumb-item"><a href="#">CRM</a></li> -->
+                        <li class="breadcrumb-item active">All Agents</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">All Agents</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="card">
+            <div class="card-body">
+                {% if request.user.is_superuser or request.user.is_staff %}
+                    <table id="scroll-horizontal-datatable" class="table w-100 nowrap">
+                        <thead>
+                            <tr>
+                                <th>SN.</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Full-name</th>
+                                <th>Agency</th>
+                                <th>Status</th>
+                                
+                                <th>Date Joined</th>
+                                <th>Last Login</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for agent in all_agents %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><a href="#">{{ agent.username }}</a></td>
+                                <td>{{ agent.email }}</td>
+                                <td>{{ agent.get_full_name }}</td>
+                                <td>Agency not configured</td>
+                                <td>{% if agent.is_active %}Active{% else %}Not active{% endif %}</td>
+                                
+                                <td>{{ agent.date_joined | date }}</td>
+                                <td>{{ agent.last_login | date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}}

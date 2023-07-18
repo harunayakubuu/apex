@@ -1,0 +1,52 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Organisor {{ organisor.username }} {% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'agencies:admin-organisor-users-list' %}">Organisors</a></li>
+                        <li class="breadcrumb-item active">{{ organisor.user.username }}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{{ organisor.user.username }}</h4>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.is_superuser or request.user.is_staff %}
+        <div class="row">
+            <div class="col-lg-12 col-md-6 col-xxl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>{{ organisor.username }} </h4>
+                        <p>
+                            Username: {{ organisor.username }}<br>
+                            Name: {{ organisor.get_full_name }}<br>
+                            Status: {% if organisor.is_active %} Active {% else %} Not active {% endif %}<br>
+                            Email: {{ organisor.email }}<br>
+                            Phone: {{ organisor.phone_number }}<br>
+                            Date Joined: {{ organisor.date_joined | date }}<br>
+                            Last Login: {{ organisor.last_login | date }}
+                        </p>                        
+                        <a href="{% url 'agencies:admin-organisor-user-update' organisor.id %}" class="btn btn-btn-sm btn-primary"><i class="mdi mdi-pencil me-1"></i> Edit</a>
+                        <a href="{% url 'agencies:admin-organisor-user-delete' organisor.pk %}" class="btn btn-btn-sm btn-danger"><i class="mdi mdi-delete me-1"></i> Delete Organisor</a>
+                        <!--<a href="{# url 'agents:private-agent-delete' agent.pk #}" class="btn btn-btn-sm btn-danger">Delete</a>-->
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+    {% endif %}
+
+{% endblock content %}

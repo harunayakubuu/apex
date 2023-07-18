@@ -1,0 +1,54 @@
+{% extends 'back-base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Property Delete</a></li>
+                        <!-- <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li> -->
+                        <li class="breadcrumb-item active">Confirm Delete</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Confirm Delete</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            {% include 'includes/alerts.html' %}
+            <div class="card">
+                <div class="card-body">
+                    {% if request.user.is_authenticated %}
+                        {% if not listing.is_locked %}
+                            <h3>Confirm Delete</h3>
+                            <form method="post">{% csrf_token %}
+                                <p>Are you sure you want to delete <strong>{{ object.name }}</strong>?</p>
+                                <p>
+                                    if deleted, everything that is associated to this property shall also be delete:<br>
+                                    {{ listing.listingpicture }}
+                                </p>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <a href="{% url 'listings:listings-list' %}" class="btn btn-success">Cancel</a>
+                            </form>
+                        {% else %}
+                            This property is locked!. <br><br>
+                                        
+                            <p>Reason(s):  {{ listing.locked_reason }}</p>
+                        {% endif %}
+                    {% else %}
+                        <p style="font-size: medium;">
+                            You are not logged in. Would you like to <a href="{% url 'accounts:account-login' %}">login</a>?
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

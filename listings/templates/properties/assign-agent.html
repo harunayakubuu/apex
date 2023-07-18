@@ -1,0 +1,51 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Assign Agent{% endblock title %}
+
+{% block content %}
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'listings:listings-list' %}">Properties</a></li>
+                        <li class="breadcrumb-item active">Assign Agent</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Assign Agent</h4>
+            </div>
+        </div>
+    </div>
+  
+    <div class="row">
+        <div class="col-12">
+            {% include 'includes/backend/terms-modal.html' %}
+            
+            {% include 'includes/alerts.html' %}
+            
+            {% if request.user.is_authenticated %}
+                {% if request.user.is_organisor %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h2>Assign an agent to {{ listing.name }}</h2>
+                            <form method="post">{% csrf_token %}
+
+                                {{ form|crispy }}
+                                
+                                <input type="submit" value="Submit" class="btn btn-info mt-3">
+                                
+                            </form>
+                            
+                        </div>
+                    </div>
+                {% else %}
+                    <h4>You do not have the permission to assign agents to properties</h4>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>                        
+{% endblock content %}

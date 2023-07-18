@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Search Results{% endblock %}
+
+
+{% block content %}
+
+    <div class="bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'pages:index' %}"> <i class="fas fa-home"></i> </a></li>
+                        <li class="breadcrumb-item"> <i class="fas fa-chevron-right"></i> <a href="{% url 'listings:public-properties-list' %}">All Properties</a></li>
+                        <li class="breadcrumb-item active"> <i class="fas fa-chevron-right"></i> <span>Search Results</span></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+    <section class="mt-3">
+        <div class="container">
+            
+            <div class="row mb-3">
+                {% include "includes/frontend/search-form.html" %}
+                <!-- end property search field -->
+            </div><!-- end row -->
+
+           
+
+            {% if queryset_list %}
+                <div class="row mt-4">
+                    {% for listing in queryset_list %}
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="property-item">
+                                <div class="property-image bg-overlay-gradient-04">
+                                    <a href="{{ listing.get_absolute_url }}">
+                                        {% if listing.listingpicture_set.all %}
+                                            <img 
+                                                class="img-fluid"
+                                                {% for pic in listing.listingpicture_set.all %} 
+                                                    src="{% if pic.is_feature %}
+                                                            {{ pic.picture.url }}
+                                                        {% else %}
+                                                            {% static 'images/properties/grid/no-image.jpg' %}
+                                                        {% endif %}"
+                                                {% endfor %} alt=""
+                                            >
+                                        
+                                        
+                                        {% else %}
+                                            <img  src="{% static 'images/properties/grid/no-image.jpg' %}" class="img-fluid">    
+                                        {% endif %}
+                                    </a>
+                                    <div class="property-lable">
+                                        <span class="badge badge-md bg-primary">{{ listing.listing_type|title }}</span>
+                                        <span class="badge badge-md bg-info">For {{ listing.status|title }} </span>
+                                    </div>
+                                    <!--<span class="property-trending" title="trending"><i class="fas fa-bolt"></i></span>-->
+                                    
+                                        <div class="property-agent">
+                                            <div class="badge badge-md bg-white">
+                                            {% if listing.is_verified %}
+                                                <i class="far fa-check-circle font-md text-success me-2"> Verified</i>
+                                            {% else %}
+                                                <i class="far fa-times-circle font-md text-warning me-2"> Pending</i>
+                                            {% endif %}
+                                                <!--<img class="img-fluid" src="frontend/images/avatar/01.jpg" alt="">-->
+                                            </div>
+                                            <!--<div class="property-agent-info">
+                                                {# if listing.listing_agent #}
+                                                    <a class="property-agent-name" href="#">{# listing.listing_agent #}</a>
+                                                    <span class="d-block">Agent</span>
+                                                    
+                                                    <ul class="property-agent-contact list-unstyled">
+                                                        <li><a href="#"><i class="fas fa-mobile-alt"></i> </a></li>
+                                                        <li><a href="#"><i class="fas fa-envelope"></i> </a></li>
+                                                    </ul>
+                                                {# endif #}
+                                            </div>-->
+                                        </div>
+                                    
+                                    <div class="property-agent-popup">
+                                        <a href="#"><i class="fas fa-camera"></i> {{ listing.listingpicture_set.all.count }}</a>
+                                    </div>
+                                </div>
+
+                                <div class="property-details">
+                                    <div class="property-details-inner">
+                                        <h5 class="property-title"><a href="{{ listing.get_absolute_url }}">{{ listing.name }} </a></h5>
+                                        <span class="property-address"><i class="fas fa-map-marker-alt fa-xs"></i>{{ listing.location }}, {{ listing.city }}, {{ listing.state }}.</span>
+                                        <span class="property-agent-date"><i class="far fa-clock fa-md"></i>{{ listing.created_at | date }}</span>
+                                        {% if listing.price %}
+                                        <div class="property-price">
+                                            &#8358;{% if listing.price < 1000000 %}{{ listing.price|intcomma }}{% else %}{{ listing.price|intword }}{% endif %} - 
+
+                                            <span class="badge badge-md {% if listing.price_status == 'fixed' %} bg-danger {% else %} bg-success {% endif %}" style="color: whitesmoke">
+                                                {{ listing.price_status|upper }}
+                                            </span>
+                                            <!-- $150.00<span> / month</span>-->
+                                        </div>
+                                        {% endif %}
+                                    
+                                        <ul class="property-info list-unstyled d-flex">
+                                            {% if listing.listingspecification_set.all %}
+                                                {% for s in listing.listingspecification_set.all %}
+                                                    {% if s.attribute.name == 'Bedrooms' %}
+                                                        <li class="flex-fill property-bed"><i class="fas fa-bed"></i>Bedcroom<span>{{ s.value }}</span></li>
+                                                    {% endif %}
+                                                    {% if s.attribute.name == 'Bathrooms' %}
+                                                        <li class="flex-fill property-bath"><i class="fas fa-bath"></i>Bathroom<span>{{ s.value }}</span></li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <li class="flex-fill property-m-sqft"><i class="far fa-square"></i>sqft<span>{{ listing.get_sqft }}m<sup>2</sup></span></li>
+                                            <!-- <li class="flex-fill property-bed"><i class="fas fa-bed"></i>Bed<span>1</span></li>
+                                            <li class="flex-fill property-bath"><i class="fas fa-bath"></i>Bath<span>2</span></li>
+                                            <li class="flex-fill property-m-sqft"><i class="far fa-square"></i>sqft<span>145m</span></li> -->
+                                        </ul>
+                                    </div>
+
+                                    <div class="property-btn">
+                                        <a class="property-link" href="{{ listing.get_absolute_url }}">See Details</a>
+                                        <!-- <ul class="property-listing-actions list-unstyled mb-0">
+                                            <li class="property-compare"><a data-bs-toggle="tooltip" data-placement="top" title="Compare" href="#"><i class="fas fa-exchange-alt"></i></a></li>
+                                            <li class="property-favourites"><a data-bs-toggle="tooltip" data-placement="top" title="Favourite" href="#"><i class="far fa-heart"></i></a></li>
+                                        </ul> -->
+                                    </div>
+
+                                    
+                                </div><!--End property detail-->
+                            </div>
+                        </div><!-- End div col 4-->
+                    {% endfor %}
+                            
+                    <div class="row">
+                        <div class="col-12">
+                            {% if page_obj.has_other_pages %}
+                                <ul class="pagination mt-5">
+                                    {% if page_obj.has_previous %}
+                                        <div class="page-item">
+                                            <a href="?page=1" class="page-link mr-auto b-radius-none">&laquo; First</a>
+                                        </div>
+                                        <div class="page-item">
+                                            <a href="?page={{ page_obj.previous_page_number }}" class="page-link mr-auto b-radius-none">Previous</a>
+                                        </div>
+                                    {% endif %}
+
+                                    <span class="page-item">
+                                        <div class="page-link mr-auto b-radius-none">
+                                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                        </div>
+                                    </span>
+
+                                    {% if page_obj.has_next %}
+                                        <div class="page-item">
+                                            <a href="?page={{ page_obj.next_page_number }}" class="page-link mr-auto b-radius-none">Next</a>  
+                                        </div>
+                                        <div class="page-item">
+                                            <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link mr-auto b-radius-none">Last &raquo;</a>
+                                        </div>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                            
+                </div><!-- End row -->
+            {% else %}
+                <section class="space-ptb bg-holder">
+                    <div class="container">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-md-4 text-center position-relative overflow-hidden">
+                                <img class="img-fluid" src="{% static 'images/not-found.png' %}" alt="">
+                            </div>
+                            <div class="col-md-6 mt-5 mt-md-0">
+                                <h1 class="mb-4">No results found</h1>
+                                <p class="lead">We've searched more than <strong>{{ queryset.count }}</strong> records we could not find any properties that matches your search.</p>
+                                <ul class="ps-3">
+                                    <li class="mb-2">Check your spelling and try again.</li>
+                                    <li class="mb-2">Ensure there is no conflict in the search parameters such as the location and state.</li>
+                                    <li class="mb-2">Keep your search location simple as our search facility works best with a shorter terms.</li>
+                                    <li class="mb-2">If you could not get result for your search, kindly <a href="{% url 'contacts:contact-form' %}">contact <a/>us for assisatance.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
+        </div><!-- end container -->
+    </section>
+
+{% endblock content %}

@@ -1,0 +1,64 @@
+
+{% extends 'back-base.html' %}
+{% load static %}
+
+{% block title %}All Blog Posts{% endblock title %}
+
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <!-- <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li> -->
+                        <li class="breadcrumb-item active">All Blog Posts</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">All Blog Posts
+                {% if request.user.is_superuser or request.user.is_staff %}
+                    <a href="{% url 'blog:post-create' %}" class="btn btn-success btn-sm ms-3">Add New Post</a></h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/alerts.html' %}
+
+    {% if request.user.is_superuser or request.user.is_staff %}
+        {% if posts %}
+            <table class="table table-centered mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>S/N</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Content</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ post.title }}</td>
+                        <td>{{ post.category.title }}</td>
+                        <td>{{ post.content }}</td>
+                        <td>{% if post.is_active %}Active {% else %} Not Active {% endif %}</td>
+                        <td><a href="{% url 'blog:post-update' post.id %}">Edit</a> | <a href="{% url 'blog:post-delete' post.id %}">Delete</a></td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+        {% else %}
+            <p>No blog posts available.</p>
+        {% endif %}
+    {% else %}
+        <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+    {% endif %}
+
+{% endblock content %}

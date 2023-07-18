@@ -1,0 +1,527 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About us{% endblock title %}
+
+{% block content %}
+	<div class="page-title">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					
+					<h2 class="ipt-title">About Us</h2>
+					<span class="ipn-subtitle">Who we are &amp; our mission</span>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<section>
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col-lg-6 col-md-6">
+					<img src="{% static 'assets/img/about-us-1.jpg' %}" class="img-fluid" alt="" />
+				</div>
+				<div class="col-lg-6 col-md-6">
+					<div class="story-wrap explore-content">
+						<h2>Chairman</h2>
+						
+						<p>
+							About the Chairman
+						</p>
+					</div>
+				</div>
+			</div>					
+		</div>				
+	</section>
+
+	<section style="background-color:#0d6efd">
+		<div class="container">
+			<div class="row justify-content-center mb-5">
+				<div class="col-lg-12">
+					<div class="text-center">
+					<h2 class="text-white mb-4">
+						We are changing the Real estate industry with progression and passion.
+					</h2>
+					<!--<p class="px-sm-5 mb-4 lead fw-normal text-white">Some text here</p>-->
+					<!-- <div class="popup-video">
+						<a class="popup-icon popup-youtube" href="https://www.youtube.com/watch?v=LgvseYYhqU0"> <i class="flaticon-play-button"></i> </a>
+					</div> -->
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="section-title text-center">
+						<h2>Plenty of reasons to choose us</h2>
+						<p style="color:black">
+							We have many specialized areas, but <strong><em>CUSTOMERS SATISFACTION</em></strong> our priority.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-3 col-sm-6">
+					<div class="feature-info single-widgets widget-tags">
+						<div class="feature-info-icon">
+							<i class="flaticon-like"></i>
+						</div>
+						<div class="feature-info-content">
+							<h6 class="mb-3 feature-info-title">Excellent Reputation</h6>
+							<p class="mb-0">
+								Our comprehensive database of properties and market info
+								give the most accurate view of the market and your home value.
+							 </p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-sm-6">
+					<div class="feature-info single-widgets widget-tags">
+						<div class="feature-info-icon">
+							<i class="flaticon-agent"></i>
+						</div>
+						<div class="feature-info-content">
+							<h6 class="mb-3 feature-info-title">Best Agents</h6>
+							<p class="mb-0">
+								You are just minutes from joining with the best agents 
+								who are trained up about helping you buy or sell.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-sm-6">
+					<div class="feature-info single-widgets widget-tags">
+						<div class="feature-info-icon">
+							<i class="flaticon-like-1"></i>
+						</div>
+						<div class="feature-info-content">
+							<h6 class="mb-3 feature-info-title">Peace of Mind</h6>
+							<p class="mb-0">
+								Be rest guaranteed that our expert team is handling every detail of your transaction 
+								from start to end.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3 col-sm-6">
+					<div class="feature-info single-widgets widget-tags">
+						<div class="feature-info-icon">
+							<i class="flaticon-house-1"></i>
+						</div>
+						<div class="feature-info-content">
+							<h6 class="mb-3 feature-info-title">Tons of options</h6>
+							<p class="mb-0">
+								Discover a place you’ll love to live in. Choose from our vast 
+								inventory and choose your desired house or land.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="space-ptb">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="section-title text-center">
+						<h2>Mission &amp; Vision</h2>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row justify-content-center">
+				<div class="col-md-6 mb-4 mb-md-0">
+					<div class="bg-dark p-5">
+						<h4 class="text-white">Our Mission <i class="far fa-circle"></i><i class="mdi mdi-adjust"></i></h4>
+						<p class="text-white">
+							To bring sanity and transparency in real estate through 
+							Information	Technology.
+						</p>
+						<!--<h3 class="text-white mt-4 mb-0">Some text</h3>-->
+					</div>
+				</div>
+				
+				<div class="col-md-6 mb-4 mb-md-0">
+					<div class="bg-success p-5">
+						<h4 class="text-white">Our Vision <i class="far fa-eye"></i></h4>
+						<p class="text-white">
+							To be the leading estate agency in the locations we cover, 
+							offering an entirely personal and dedicated service.
+						</p>
+						<!--<h3 class="text-white mt-4 mb-0">Some text</h3>-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	{% if services %}
+		<section class="space-pb">
+			<div class="container">
+				<div class="row">
+					<div class="section-title text-center mb-3">
+						<h2 class="blink_me">Services We Offer</h2>
+						<!-- <p>Find your dream homes &amp; Lands</p> -->
+					</div>
+					{% for service in services %}
+					<div class="col-lg-4 col-sm-6 mb-4">
+						<div class="bg-light p-4 py-5 text-center">
+							<i class="flaticon-agent font-xlll text-primary mb-4"></i>
+							<h5 class="mb-3">{{ service.title | title }}</h5>
+							<p class="mb-0">{{ service.description }}</p>
+						</div>
+					</div>
+					{% endfor %}          	
+				</div>
+			</div>
+		</section>
+	{% endif %}
+
+
+	<section>
+		<div class="container">
+		<div class="border">
+			<div class="row justify-content-center">
+				<div class="col-lg-7 col-md-10 text-center">
+					<div class="sec-heading center mb-3 mt-3">
+						<h2>Achievements</h2>
+						<!--<p>
+							At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+							praesentium voluptatum deleniti atque corrupti quos dolores
+						</p>-->
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-3 col-md-3 col-sm-6">
+					<div class="achievement-wrap">
+						<div class="achievement-content">
+							<h4>{{ locations_count }}+</h4>
+							<p>Locations Covered</p>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-lg-3 col-md-3 col-sm-6">
+					<div class="achievement-wrap">
+						<div class="achievement-content">
+							<h4>{{ listing_sale_count }}+</h4>
+							<p>Properties Sold</p>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-lg-3 col-md-3 col-sm-6">
+					<div class="achievement-wrap">
+						<div class="achievement-content">
+							<h4>{{ listing_rent_count }}+</h4>
+							<p>Properties Managed</p>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-lg-3 col-md-3 col-sm-6">
+					<div class="achievement-wrap">
+						<div class="achievement-content">
+							<h4>{{ agents_count }}+</h4>
+							<p>Happy Customers</p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		</div>
+	</section>
+
+	{% if team_members %}
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					<div class="sec-heading center">
+						<h2>Meet Our Team</h2>
+						<p>Professional &amp; Dedicated Team</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				{% for member in team_members %}
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<div class="agents-grid">
+						
+						<div class="agents-grid-wrap">
+							
+							<div class="fr-grid-thumb">
+								<a href="freelancer-detail.html">
+									<img src="{{ member.picture.url }}" class="img-fluid mx-auto" alt="" />
+								</a>
+							</div>
+							
+							<div class="fr-grid-deatil">
+								<div class="fr-grid-deatil-flex">
+									<h5 class="fr-can-name"><a href="#">{{ member.user.get_full_name }}</a></h5>
+									<span class="agent-property">
+										{% if member.designation == "ceo" %}
+											MD/CEO
+										{% elif member.designation == 'business_consultant' %}
+											Business Consultant
+										{% elif member.designation == 'it_consultant' %}
+											IT Consultant
+										{% elif member.designation == 'business_consultant' %}
+											Legal Consultant
+										{% endif %}
+									</span>
+								</div>
+								<!--
+								<div class="fr-grid-deatil-flex-right">
+									<div class="agent-email"><a href="#"><i class="ti-email"></i></a></div>
+								</div>
+								-->
+							</div>
+							
+						</div>
+						
+						<div class="fr-grid-info">
+							<ul>
+								<li><strong>Words:</strong> {{ member.words }}</li>
+							</ul>
+						</div>
+						
+						<!--
+						<div class="fr-grid-footer">
+							<div class="fr-grid-footer-flex">
+								<span class="fr-position"><i class="lni-map-marker"></i>Dummy</span>
+							</div>
+							<div class="fr-grid-footer-flex-right">
+								<a href="" class="prt-view" tabindex="0">View</a>
+							</div>
+						</div>
+						-->
+						
+					</div>
+				</div>
+				{% endfor %}
+				
+			</div>
+			<!--<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 text-center">
+					<a href="listings-list-with-sidebar.html" class="btn btn-theme-light-2 rounded">Explore More Agents</a>
+				</div>
+			</div>-->
+		</div>
+	</section>
+	{% endif %}
+
+
+	<section class="gray-bg">
+		<div class="container">
+		
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					<div class="sec-heading center">
+						<h2>Meet Our Agents</h2>
+						<p>Professional &amp; Dedicated Team of Agents</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+				
+					<div class="team-slide item-slide">
+						
+						{% for member in team_members %}
+						<div class="single-team">
+							<div class="team-grid">
+						
+								<div class="teamgrid-user">
+									<!--400X400-->
+									<img src="{{ member.picture.url }}" alt="" class="img-fluid" />
+								</div>
+								
+								<div class="teamgrid-content">
+									<h4>{{ member.user.get_full_name }}</h4>
+									<span>
+										{% if member.designation == "ceo" %}
+											MD/CEO
+										{% elif member.designation == 'business_consultant' %}
+											Business Consultant
+										{% elif member.designation == 'it_consultant' %}
+											IT Consultant
+										{% elif member.designation == 'business_consultant' %}
+											Legal Consultant
+										{% endif %}
+									</span>
+								</div>
+								
+								<div class="teamgrid-social">
+									<ul>
+										<li><a href="#" class="f-cl"><i class="ti-facebook"></i></a></li>
+										<li><a href="#" class="t-cl"><i class="ti-twitter"></i></a></li>
+										<li><a href="#" class="i-cl"><i class="ti-instagram"></i></a></li>
+										<li><a href="#" class="l-cl"><i class="ti-linkedin"></i></a></li>
+									</ul>
+								</div>
+					
+							</div>
+						</div>
+						{% endfor %}		
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	{% if testimonials %}
+		<section class="bg-orange">
+			<div class="container">
+			
+				<div class="row justify-content-center">
+					<div class="col-lg-7 col-md-10 text-center">
+						<div class="sec-heading center">
+							<h2>Reviews by Customers</h2>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row justify-content-center">
+					
+					<div class="col-lg-12 col-md-12">
+						<div class="smart-textimonials smart-center" id="smart-textimonials">
+							{% for testimony in testimonials %}
+							<div class="item">
+								<div class="item-box">
+									<div class="smart-tes-author">
+										<div class="st-author-box">
+											<div class="st-author-thumb">
+												<div class="quotes bg-blue"><i class="ti-quote-right"></i></div>
+												<img src="{% static 'assets/img/users/no-picture.png' %}" class="img-fluid" alt="" />
+											</div>
+										</div>
+									</div>
+									<div class="smart-tes-content">
+										<p>{{ testimony.testimonial }}</p>
+									</div>
+									<div class="st-author-info">
+										<h4 class="st-author-title">{{ testimony.user }}</h4>
+										<span class="st-author-subtitle">{{ testimony.user.home_address }}, {{ testimony.user.state | title }}</span>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	{% endif %}
+
+
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					<div class="sec-heading center">
+						<h2>Our Work Process</h2>
+						<p>Professional &amp; Dedicated Team</p>
+					</div>
+				</div>
+			</div>
+			<div class="row align-items-center">
+				<div class="col-lg-6 col-md-6">
+					<div class="icon-mi-left">
+						<i class="ti-lock theme-cl"></i>
+						<div class="icon-mi-left-content">
+							<h4>Fully Secure &amp; 24x7 Dedicated Support</h4>
+							<p>If you are an individual client, or just a business startup looking for good backlinks for your website.</p>
+						</div>
+					</div>
+
+					<div class="icon-mi-left">
+						<i class="ti-key theme-cl"></i>
+						<div class="icon-mi-left-content">
+							<h4>We are Very Hard Worker and loving</h4>
+							<p>If you are an individual client, or just a business startup looking for good backlinks for your website.</p>
+						</div>
+					</div>
+					
+					<div class="icon-mi-left">
+						<i class="ti-twitter theme-cl"></i>
+						<div class="icon-mi-left-content">
+							<h4>Manage your Social &amp; Busness Account Carefully</h4>
+							<p>If you are an individual client, or just a business startup looking for good backlinks for your website.</p>
+						</div>
+					</div>
+					
+					<div class="icon-mi-left">
+						<i class="ti-layers theme-cl"></i>
+						<div class="icon-mi-left-content">
+							<h4>We are Very Hard Worker and loving</h4>
+							<p>If you are an individual client, or just a business startup looking for good backlinks for your website.</p>
+						</div>
+					</div>
+					
+				</div>
+				
+				<div class="col-lg-6 col-md-6">
+					<!--700x850-->
+					<img src="{% static 'assets/img/about-us-2.jpg' %}" class="img-fluid" alt="" />
+				</div>
+			</div>
+
+		</div>
+	</section>
+
+
+	<div class="clearfix"></div>
+
+
+	{% if partners %}
+		<section class="py-5 our-clients">
+			<div class="container">
+				<div class="ection-title text-center mb-3">
+					<h2>Our Partners</h2>
+				</div>
+				
+				<div class="row justify-content-center">
+					<div class="col-12">
+						<div class="owl-carousel owl-nav-center" data-animateOut="fadeOut" data-nav-dots="false" data-items="6" data-md-items="5" data-sm-items="4" data-xs-items="3" data-xx-items="2" data-space="50">
+							<div class="item">
+								<img class="img-fluid" src="{% static 'images/partners/amazon.svg' %}" alt="">
+							</div>
+							<div class="item">
+								<img class="img-fluid" src="{% static 'images/partners/flipkart.svg' %}" alt="">
+							</div>
+							<div class="item">
+								<img class="img-fluid" src="{% static 'images/partners/google.svg' %}" alt="">
+							</div>
+							<div class="item">
+								<img class="img-fluid" src="{% static 'images/partners/paypal.svg' %}" alt="">
+							</div>
+							<div class="item">
+								<img class="img-fluid" src="{% static 'images/partners/philips.svg' %}" alt="">
+							</div>
+							<div class="item">
+								<img class="img-fluid" src="{% static 'images/partners/slack.svg' %}" alt="">
+							</div>
+							<div class="item">
+								<img class="img-fluid" src="{% static 'images/partners/spotify.svg' %}" alt="">
+							</div>
+							<div class="item">
+								<img class="img-fluid" src="{% static 'images/partners/stack-overflow.svg' %}" alt="">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	{% endif %}
+
+{% endblock content %}

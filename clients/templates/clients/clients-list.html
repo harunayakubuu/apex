@@ -1,0 +1,68 @@
+{% extends "back-base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} All Clients{% endblock title %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <!-- <li class="breadcrumb-item"><a href="#">CRM</a></li> -->
+                        <li class="breadcrumb-item active">All Clients</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">All Clients <em>(Total {{ clients.count }})</em></h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% include "includes/alerts.html" %}
+        <div class="card">
+            <div class="card-body">
+                {% if request.user.is_superuser or request.user.staff %}
+                    <table id="scroll-horizontal-datatable" class="table w-100 nowrap">
+                        <thead>
+                            <tr>
+                                <th>SN.</th>
+                                <th>Full-name</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                
+                                <th>Status</th>
+                                <th>Verification Status</th>
+                                <th>Date Joined</th>
+                                <th>Last Login</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for client in clients %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{% if client.get_full_name %}{{ client.get_full_name }}{% else %} - {% endif %}</td>
+
+                                <td><a href="{% url 'clients:admin-client-user-details' client.id %}">{{ client.username }}</a></td>
+                                <td>{{ client.email }}</td>
+                                <td>{% if client.is_active %}Active{% else %}Not active{% endif %}</td>
+                                <td>{% if client.is_verified %} Verified {% else %} Pending {% endif %}</td>
+                                <td>{{ client.date_joined | date }}</td>
+                                <td>{{ client.last_login | date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}}

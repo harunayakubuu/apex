@@ -1,0 +1,58 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Agent Create Form{% endblock title %}
+
+<!-- For individual Agents to create their profiles themselves -->
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+
+                        <li class="breadcrumb-item active">Agent Form</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Agent Form</h4>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        {% if request.user.is_authenticated %}
+            <div class="col-12">
+                {% include 'includes/alerts.html' %}
+                {% if request.user.is_agent %}
+                    {% if not request.user.agent %}
+                        <div class="card align-items-center">
+                            <div class="card-body">
+                                <h3>Agent Create Form</h3>
+                                <form method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
+                                    <div class="row mb-2">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                            {{ user_form|crispy }}
+                                            {{ agent_create_form|crispy }}
+                                        </div>
+                                    </div>
+                                
+                                    <div class="row">
+                                        <div class="mb-3">
+                                            <input type="submit" value="Save Changes" class="btn btn-success">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% else %}
+                        <h4>You already have created profile, you can <a href="{% url 'agents:agent-update' %}">update</a> here.</h4>
+                    {% endif %}
+                {% else %}
+                    <p>You currently do not have access to this page.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

@@ -1,0 +1,113 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Agency Update Form{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+
+                        <li class="breadcrumb-item active">Agency Update Form</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Agency Update Form</h4>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        {% if request.user.is_authenticated %}
+            <div class="col-12">
+            
+                {% include 'includes/alerts.html' %}
+            
+                {% if request.user.is_organisor %}
+                    
+                    <div class="card align-items-center">
+                        <div class="card-body">
+                            <h3>Agency Update Form</h3>
+                            <form method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
+                                <div class="row mb-3">                                    
+                                    
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="mb-3">
+                                            {{ form.name|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="mb-3">
+                                            {{ form.address|as_crispy_field }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="mb-3">
+                                            {{ form.phone_number|as_crispy_field }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="mb-3">
+                                            {{ form.whatsapp_number|as_crispy_field }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="mb-3">
+                                            {{ form.office_phone|as_crispy_field }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="mb-3">
+                                            {{ form.email|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="mb-3">
+                                            {{ form.city|as_crispy_field }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="mb-3">
+                                            {{ form.state|as_crispy_field }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                        <div class="mb-3">
+                                            {{ form.logo|as_crispy_field }}
+                                        </div>
+                                    </div>                                    
+
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <div class="mb-3">
+                                            {{ form.about|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <div class="row">
+                                    <div class="mb-3">
+                                    <input type="submit" value="Save Changes" class="btn btn-success">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
+

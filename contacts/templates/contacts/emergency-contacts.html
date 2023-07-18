@@ -1,0 +1,74 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}My Contacts Form{% endblock title %}
+
+{% block content %}     
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <!-- <li class="breadcrumb-item"><a href="">CRM</a></li> -->
+                        <li class="breadcrumb-item active">My Contacts</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">My Contacts
+                {% if request.user.emergencycontact_set.all.count < 4 %}
+                    <a href="{% url 'contacts:emergency-contact-create' %}" class="btn btn-success btn-sm ms-3">Add New</a>
+                {% else %} 
+                {% endif %}
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% include 'includes/alerts.html' %}
+
+        {% if emergency_contacts %}
+            {% for contact in emergency_contacts %}
+                <div class="col-md-6 col-xxl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="dropdown float-end">
+                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="mdi mdi-dots-horizontal"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="{{ contact.get_edit_contact }}" class="dropdown-item">Edit</a>
+                                    <a href="{% url 'contacts:emergency-contact-delete' contact.id %}" class="dropdown-item">Remove</a>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                {% if contact.picture %}
+                                    <img src="{{ contact.picture.url }}" class="rounded-circle avatar-md img-thumbnail" alt="friend">
+                                {% else %}
+                                    <img src="{% static 'backend/assets/images/users/avatar-1.jpg' %}" class="rounded-circle avatar-md img-thumbnail" alt="friend">
+                                {% endif %}
+                                <h4 class="mt-3 my-1">{{ contact.full_name }} <!--<i class="mdi mdi-check-decagram text-primary"></i>--></h4>
+                                <p class="mb-0 text-muted"><i class="mdi mdi-account-switch-outline me-1"></i>{{ contact.relationship | title }}</p>
+                                <hr class="bg-dark-lighten my-3">
+                                <h5 class="mt-3 fw-semibold text-muted">{% if contact.is_next_of_kin %}<b>Next of kin</b>{% endif %}</h5>
+                            
+                                <div class="row mt-3">
+                                    
+                                    <div class="col-6">
+                                        <i class="mdi mdi-phone"></i> {{ contact.phone }}
+                                    </div>
+                                    <div class="col-6">
+                                        <i class="mdi mdi-email-outline"></i> {{ contact.email }}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock content %}

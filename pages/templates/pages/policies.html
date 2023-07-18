@@ -1,0 +1,65 @@
+{% extends 'back-base.html' %}
+{% load static %}
+
+{% block title %}Privacy Policy{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Privacy Policy</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Privacy Policy
+                    <a href="{% url 'pages:policy-create' %}" class="btn btn-success btn-sm ms-3">Add New Policy</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.is_superuser or request.user.is_staff %}
+        <div class="row">
+            <div class="col-12">
+                {% include 'includes/alerts.html' %}
+                <div class="card">
+                    <div class="card-body">
+                        <table id="scroll-horizontal-datatable" class="table w-100 nowrap">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Title</th>
+                                    <th>policy</th>
+                                    <th>Status</th>
+                                
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for policy in policies %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td><a href="{% url 'pages:policy-edit' policy.id %}"> {{ policy.title | title }}</a></td>
+                                    <td>{{ policy.policy|safe }}</td>
+                                    <td>{% if policy.is_active %}
+                                            <span class="badge badge-success-lighten p-1 font-14">Active</span>
+                                        {% else %}
+                                            <span class="badge badge-warnig-lighten p-1 font-14">Active</span>
+                                        {% endif %}
+                                    </td>
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    {% else %}
+        <p>You currently do not have access to this page. Please</p>
+    {% endif %}
+
+{% endblock content %}

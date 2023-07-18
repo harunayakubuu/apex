@@ -1,0 +1,747 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+
+{% block title %}{{ listing.name }}{% endblock title %}
+
+{% block content %}
+
+{% include "includes/enquiry-modal.html" %}
+{% include "includes/alerts.html" %}
+
+<section class="gray-simple">
+	<div class="container">
+	<div class="property_block_wrap style-3 p-4">
+					
+		<div class="pbw-flex-1">
+			<div class="pbw-flex-thumb">
+				{% if listing.listingpicture_set.all %}
+					{% for pic in listing.listingpicture_set.all %}
+						{% if pic.is_feature %}
+							<img src="{{ pic.picture.url }}" class="img-fluid" alt="" />
+						{% else %}
+							<img src="{% static 'assets/img/users/no-picture.png' %}" class="img-fluid" alt="" />
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<img src="{% static 'assets/img/users/no-picture.png' %}" class="img-fluid" alt="" />
+				{% endif %}
+			</div>
+		</div>
+		
+		<div class="pbw-flex">
+			<div class="prt-detail-title-desc">
+				
+				<span {% if listing.status == 'sale' %} class="prt-types sale" {% elif listing.status == 'rent' %} class="prt-types rent" {% endif %}>For {{ listing.status | title }}</span>
+			
+				<h3>{{ listing.name }}, {{ listing.city }}.</h3>
+				<span><i class="lni-map-marker"></i> {{ listing.address }}, {{ listing.location }}, {{ listing.state }}</span>
+				<h3 class="prt-price-fix">
+					&#8358;{% if listing.price < 1000000 %}{{ listing.price|intcomma }}{% else %}{{ listing.price|intword }} {% endif %}
+					{% if listing.status == 'rent' %}
+						<sub>/year</sub>
+					{% endif %}
+					<span class="badge badge-md {% if listing.price_status == 'fixed' %} bg-danger {% else %} bg-success {% endif %}" style="color: whitesmoke;">
+						{{ listing.price_status|upper }}
+					</span>
+				</h3>
+				<div class="list-fx-features">
+					{% if listing.listingspecification_set.all %}
+						{% for s in listing.listingspecification_set.all %}
+							{% if s.attribute.name == 'Bedroom' %}
+								<div class="listing-card-info-icon">
+									<div class="inc-fleat-icon"><img src="{% static 'assets/img/bed.svg' %}" width="13" alt="Bedrooms"></div>{{ s.value }} Beds
+								</div>
+							{% endif %}
+							{% if s.attribute.name == 'Bathroom' %}
+								<div class="listing-card-info-icon">
+									<div class="inc-fleat-icon"><img src="{% static 'assets/img/bathtub.svg' %}" width="13" alt="Bathrooms"></div>{{ s.value }} Bath
+								</div>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+					<div class="listing-card-info-icon">
+						<div class="inc-fleat-icon"><img src="{% static 'assets/img/move.svg' %}" width="13" alt="Square-feet"></div>{{ listing.get_sqft }} sqft
+					</div>
+				</div>
+
+				<div class="mt-4">
+					{% if listing.discount_available %}
+                    {% if listing.discount_percentage_off %}
+                    <div class="p-4 bg-overlay-black-30 mb-2 mt-2">
+                      <!-- <h4 style="border: solid black; border-radius: 10%;"> -->
+                        <div class="">
+                          <div class="">
+                            <span class="text-center">
+                              <strong><h4>{{ listing.discount_percentage_off }}% of the commission Off.</h4></strong>
+                            </span>
+                          </div>
+                        </div>
+                      <!-- </h4> -->
+                    </div>
+                    {% endif %}
+  
+                  <div class="property-countdown mt-4 mb-3">
+                    <div id="offer-box">
+                      <span><strong>Ends on :</strong> {{ listing.discount_ends|date:"M d, Y H:m:s" }}</span>
+                    </div>
+                    
+                    <div id="countdown-box">
+                      <h5 class="mb-3">Time left: </h5>
+                      <!-- <div class="spinner-border" role="status"></div> -->
+                    
+                    
+                      <div class="countdown countdown-small">
+                        <span class="theme-color" id="day-box"></span>
+                        <p class="days_ref">days</p>
+                      </div>
+                      <div class="countdown countdown-small">
+                        <span class="theme-color" id="hour-box"></span>
+                        <p class="hours_ref">hours</p>
+                      </div>
+                      <div class="countdown countdown-small">
+                        <span class="theme-color" id="minute-box"></span>
+                        <p class="minutes_ref">minutes</p>
+                      </div>
+                      <div class="countdown countdown-small">
+                        <span class="theme-color" id="second-box"></span>
+                        <p class="seconds_ref">seconds</p>
+                      </div>
+  
+                    </div>
+                  </div>
+                  {% endif %}
+				</div>
+
+				<div class="mt-4">
+					<div class="listing-card-info-icon">
+						{{ listing.enquiry_count }} persons have asked.</h3>
+					</div>
+					<div class="listing-card-info-icon">
+						0 persons currently asking.</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	</div>
+</section>
+				
+	<section class="gray">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-8 col-md-12 col-sm-12">
+					 {% if listing.listingspecification_set.all %}					
+						<div class="property_block_wrap style-2">
+							<div class="property_block_wrap_header">
+								<a data-bs-toggle="collapse" data-parent="#features" data-bs-target="#clOne" aria-controls="clOne" href="javascript:void(0);" aria-expanded="false"><h4 class="property_block_title">Detail &amp; Features</h4></a>
+							</div>
+							<div id="clOne" class="panel-collapse collapse show" aria-labelledby="clOne" aria-expanded="true">
+								<div class="block-body">
+									<ul class="deatil_features">
+										{% for spec in listing.listingspecification_set.all %}  
+											<li><strong>{{ spec.attribute }}:</strong>{{ spec.value }}</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+					
+					{% if listing.description %}
+					<div class="property_block_wrap style-2">
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#dsrp" data-bs-target="#clTwo" aria-controls="clTwo" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Description</h4></a>
+						</div>
+						<div id="clTwo" class="panel-collapse collapse show" aria-expanded="true">
+							<div class="block-body">
+								<p> {{ listing.description }}</p>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					<!-- Single Block Wrap -->
+					{% if listing.listingadditionalfeature_set.all %}
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#amen"  data-bs-target="#clThree" aria-controls="clThree" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Ameneties</h4></a>
+						</div>
+						
+						<div id="clThree" class="panel-collapse collapse show" aria-expanded="true">
+							<div class="block-body">
+								<ul class="avl-features third color">
+									{% for feature in listing.listingadditionalfeature_set.all %}
+										{% for f in feature.feature.all %} 
+											<li>{{ f }}</li>
+										{% endfor %}
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					<!-- Single Block Wrap -->
+					{% if listing.listingvideo.video.url %}
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#vid"  data-bs-target="#clFour" aria-controls="clFour" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Property video</h4></a>
+						</div>
+						
+						<div id="clFour" class="panel-collapse collapse" aria-expanded="true">
+							<div class="block-body">
+								<div class="property_video">
+									<div class="thumb">
+										<video class="w100" controls allowfullscreen>
+											<source src="{{ listing.listingvideo.video.url }}" type="video/mp4">
+										</video>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					{% endif %}
+					
+					<!-- Single Block Wrap -->
+					{% if listing.listingfloor_set.all %}
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#floor"  data-bs-target="#clFive" aria-controls="clFive" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Floor Plan</h4></a>
+						</div>
+						
+						<div id="clFive" class="panel-collapse collapse" aria-expanded="true">
+							<div class="block-body">
+								<div class="accordion" id="floor-option">
+									{% for floor in listing.listingfloor_set.all %}
+									<div class="card">
+										<div class="card-header" id="{{ floor.id }}">
+											<h2 class="mb-0">
+												<button type="button" class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#{{ floor.floor }}" aria-controls="{{ floor.floor }}">{{ floor.floor|title }} Floor<span>740 sq ft</span></button>									
+											</h2>
+										</div>
+										<div id="{{ floor.floor }}" class="collapse" aria-labelledby="{{ floor.id }}" data-parent="#floor-option">
+											
+											<div class="card-body">
+												<p>
+													<div class="row">
+														<div class="col-sm-3">Parlor: {{ floor.parlor }}</div>
+														<div class="col-sm-3">Rooms: {{ floor.number_of_rooms }}</div>
+														<div class="col-sm-3">Rest Rooms: {{ floor.rest_rooms }}</div>
+														<div class="col-sm-3">Store: {{ floor.store }}</div>
+													</div>
+												</p>
+												{% if floor.floor_plan %}
+													<img src="{{ floor.floor_plan.url }}" class="img-fluid" alt="" />
+												{% endif %}
+											</div>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					{% endif %}
+					
+					<!-- Single Block Wrap -->
+					{% if listing.lat and listing.lon %}
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#loca"  data-bs-target="#clSix" aria-controls="clSix" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Location</h4></a>
+						</div>
+						
+						<div id="clSix" class="panel-collapse collapse" aria-expanded="true">
+							<div class="block-body">
+								<div class="map-container">
+									<div id="singleMap" data-latitude="{{ listing.lat }}" data-longitude="{{ listing.lon }}" data-mapTitle="Our Location">
+										{{ map|safe }}
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					<!-- Single Block Wrap -->
+					{% if listing.listingpicture_set.all %}
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#clSev"  data-bs-target="#clSev" aria-controls="clOne" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Gallery</h4></a>
+						</div>
+						
+						<div id="clSev" class="panel-collapse collapse" aria-expanded="true">
+							<div class="block-body">
+								<ul class="list-gallery-inline">
+									{% for pic in listing.listingpicture_set.all %}
+										<li>
+											<a href="{{ pic.picture.url }}" class="mfp-gallery"><img src="{{ pic.picture.url }}" class="img-fluid mx-auto" alt="" /></a>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+						
+					</div>
+					{% endif %}
+					
+					<!-- All over Review 
+					<div class="rating-overview">
+						<div class="rating-overview-box">
+							<span class="rating-overview-box-total">4.2</span>
+							<span class="rating-overview-box-percent">out of 5.0</span>
+							<div class="star-rating" data-rating="5"><i class="ti-star"></i><i class="ti-star"></i><i class="ti-star"></i><i class="ti-star"></i><i class="ti-star"></i>
+							</div>
+						</div>
+
+						<div class="rating-bars">
+								<div class="rating-bars-item">
+									<span class="rating-bars-name">Service</span>
+									<span class="rating-bars-inner">
+										<span class="rating-bars-rating high" data-rating="4.7">
+											<span class="rating-bars-rating-inner" style="width: 85%;"></span>
+										</span>
+										<strong>4.7</strong>
+									</span>
+								</div>
+								<div class="rating-bars-item">
+									<span class="rating-bars-name">Value for Money</span>
+									<span class="rating-bars-inner">
+										<span class="rating-bars-rating good" data-rating="3.9">
+											<span class="rating-bars-rating-inner" style="width: 75%;"></span>
+										</span>
+										<strong>3.9</strong>
+									</span>
+								</div>
+								<div class="rating-bars-item">
+									<span class="rating-bars-name">Location</span>
+									<span class="rating-bars-inner">
+										<span class="rating-bars-rating mid" data-rating="3.2">
+											<span class="rating-bars-rating-inner" style="width: 52.2%;"></span>
+										</span>
+										<strong>3.2</strong>
+									</span>
+								</div>
+								<div class="rating-bars-item">
+									<span class="rating-bars-name">Cleanliness</span>
+									<span class="rating-bars-inner">
+										<span class="rating-bars-rating poor" data-rating="2.0">
+											<span class="rating-bars-rating-inner" style="width:20%;"></span>
+										</span>
+										<strong>2.0</strong>
+									</span>
+								</div>
+						</div>
+					</div>
+					
+					All over Review
+					Single Reviews Block
+					
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#rev"  data-bs-target="#clEight" aria-controls="clEight" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">102 Reviews</h4></a>
+						</div>
+						
+						<div id="clEight" class="panel-collapse collapse show" aria-expanded="true">
+							<div class="block-body">
+								<div class="author-review">
+									<div class="comment-list">
+										<ul>
+											<li class="article_comments_wrap">
+												<article>
+													<div class="article_comments_thumb">
+														<img src="https://via.placeholder.com/400x400" alt="">
+													</div>
+													<div class="comment-details">
+														<div class="comment-meta">
+															<div class="comment-left-meta">
+																<h4 class="author-name">Rosalina Kelian</h4>
+																<div class="comment-date">19th May 2018</div>
+															</div>
+														</div>
+														<div class="comment-text">
+															<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim laborumab.
+																perspiciatis unde omnis iste natus error.</p>
+														</div>
+													</div>
+												</article>
+											</li>
+											<li class="article_comments_wrap">
+												<article>
+													<div class="article_comments_thumb">
+														<img src="https://via.placeholder.com/400x400" alt="">
+													</div>
+													<div class="comment-details">
+														<div class="comment-meta">
+															<div class="comment-left-meta">
+																<h4 class="author-name">Rosalina Kelian</h4>
+																<div class="comment-date">19th May 2018</div>
+															</div>
+														</div>
+														<div class="comment-text">
+															<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim laborumab.
+																perspiciatis unde omnis iste natus error.</p>
+														</div>
+													</div>
+												</article>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<a href="#" class="reviews-checked theme-cl"><i class="fas fa-arrow-alt-circle-down mr-2"></i>See More Reviews</a>
+							</div>
+						</div>
+						
+					</div>
+					-->
+					
+					<!-- Single Block Wrap -->
+					{% if listing.get_nearbys_children %}
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#nearby" data-bs-target="#clNine" aria-controls="clNine" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Nearby</h4></a>
+						</div>
+						
+						<div id="clNine" class="panel-collapse collapse show" aria-expanded="true">
+							<div class="block-body">
+								
+								<div class="nearby-wrap">
+									<div class="nearby_header">
+										<div class="nearby_header_first">
+											{% for category in nearby_categories %}
+												<h5{{ category.name }}></h5>
+											{% endfor %}
+										</div>
+										<div class="nearby_header_last">
+											<div class="nearby_powerd">
+												Location
+											</div>
+										</div>
+									</div>
+									
+									<div class="neary_section_list">
+										{% for nearby in listing.get_nearbys_children %}
+											<div class="neary_section">	
+												<div class="neary_section_first">
+													<h4 class="nearby_place_title">{{ nearby.name }} <smal> ({{ nearby.approximate_distance }}km)</small></h4>
+												</div>
+												<div class="neary_section_last">
+													{{ nearby.location }}													
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					{% endif %}
+
+					
+					
+					<!-- Single Write a Review -->
+					<!--
+					<div class="property_block_wrap style-2">
+						
+						<div class="property_block_wrap_header">
+							<a data-bs-toggle="collapse" data-parent="#comment" data-bs-target="#clTen" aria-controls="clTen" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Write a Review</h4></a>
+						</div>
+						
+						<div id="clTen" class="panel-collapse collapse show" aria-expanded="true">
+							<div class="block-body">
+								<form class="simple-form">
+									<div class="row">
+										
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group">
+												<textarea class="form-control ht-80" placeholder="Messages"></textarea>
+											</div>
+										</div>
+										
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="Property Title">
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="Your Name">
+											</div>
+										</div>
+										
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<input type="email" class="form-control" placeholder="Your Email">
+											</div>
+										</div>
+										
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group">
+												<button class="btn btn-theme-light-2 rounded" type="submit">Submit Review</button>
+											</div>
+										</div>
+
+
+										
+									</div>
+								</form>
+							</div>
+						</div>
+						
+					</div>
+					-->
+					
+				</div>
+				
+				<!-- property Sidebar -->
+				<div class="col-lg-4 col-md-12 col-sm-12">
+					
+					<!-- Like And Share -->
+					<div class="like_share_wrap b-0">
+						<ul class="like_share_list">
+							<li><a href="JavaScript:Void(0);" class="btn btn-likes" data-toggle="tooltip" data-original-title="Share"><i class="fas fa-share"></i>Share</a></li>
+							<li><a href="JavaScript:Void(0);" class="btn btn-likes" data-toggle="tooltip" data-original-title="Save"><i class="fas fa-heart"></i>Bookmark</a></li>
+						</ul>
+					</div>
+					
+					<div class="details-sidebar">
+						<!-- Agent Detail -->
+						<div class="sides-widget">
+							<div class="sides-widget-header">
+								<div class="agent-photo">
+									{% if listing.listing_agent.user.agent.display_picture %}
+										<img src="{{ listing.listing_agent.user.agent.display_picture.url }}" alt="Agent">
+									{% else %}
+										<img src="{% static 'assets/img/avatar/no-picture.png' %}" alt="Agent">
+									{% endif %}
+								</div>
+								<div class="sides-widget-details">
+									<h4>Agent: {% if listing.listing_agent %} {{ listing.listing_agent.user.username | title }} {% else %}None {% endif %}</h4>
+									<span class="mb-2"><i class="lni-phone-handset"></i>
+										07036188150
+									</span>
+									<br />
+									<span><i class="lni-phone-handset"></i>
+										<a href="JavaScript:Void(0);" data-bs-toggle="modal" data-bs-target="#signup" class="btn btn-black btn-sm rounded">Send Enquiry</a>
+									</span>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+						
+						<!-- Mortgage Calculator -->
+						<!--<div class="sides-widget">
+
+							<div class="sides-widget-header">
+								<div class="sides-widget-details">
+									<h4><a href="#">Shivangi Preet</a></h4>
+									<span>View your Interest Rate</span>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							
+							<div class="sides-widget-body simple-form">
+								<div class="form-group">
+									<div class="input-with-icon">
+										<input type="text" class="form-control" placeholder="Sale Price">
+										<i class="ti-money"></i>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<div class="input-with-icon">
+										<input type="text" class="form-control" placeholder="Down Payment">
+										<i class="ti-money"></i>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<div class="input-with-icon">
+										<input type="text" class="form-control" placeholder="Loan Term (Years)">
+										<i class="ti-calendar"></i>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<div class="input-with-icon">
+										<input type="text" class="form-control" placeholder="Interest Rate">
+										<i class="fa fa-percent"></i>
+									</div>
+								</div>
+								
+								<button class="btn btn-black btn-md rounded full-width">Calculate</button>
+							
+							</div>
+						</div>-->
+						
+						<!-- Featured Property -->
+						{% if featured_listings %}
+						<div class="sidebar-widgets">
+							
+							<h4>Featured Properties</h4>
+							{% for item in featured_listings %}
+							<div class="sidebar_featured_property">
+								<div class="sides_list_property">
+									<div class="sides_list_property_thumb">
+										{% if item.listingpicture_set.all %}
+											<img {% for pic in item.listingpicture_set.all %} src="{% if pic.is_feature %} {{ pic.picture.url }} {% else %} {% static 'images/properties/grid/no-image.jpg' %} {% endif %}" {% endfor %} class="img-fluid mx-auto" alt=""/>
+										{% else %}
+											<img src="{% static 'assets/img/grid/no-image.jpg' %}" class="img-fluid mx-auto" alt="" />
+										{% endif %}
+									</div>
+									<div class="sides_list_property_detail">
+										<h4><a href="single-property-1.html">{{ item.name }}</a></h4>
+										<span><i class="ti-location-pin"></i>{{ item.location }}, {{ item.city }}</span>
+										<div class="lists_property_price">
+											<div class="lists_property_types">
+												{% if item.status == 'sale' %}
+													<div class="property_types_vlix sale">For {{ item.status | title }}</div>
+												{% elif listing.status == 'rent' %}
+													<div class="property_types_vlix rent">For {{ item.status | title }}</div>
+												{% endif %}
+											</div>
+											{% if item.price %}
+											<div class="lists_property_price_value">
+												<h4>
+													{% if item.price < 1000000 %}
+														{{ item.price|intcomma }}
+													{% else %}
+														{{ item.price|intword }}
+													{% endif %}
+												</h4>
+											</div>
+											{% endif %}
+										</div>
+									</div>
+								</div>							
+							</div>
+							{% endfor %}							
+						</div>
+						{% endif %}
+					
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</section>
+	
+	<hr />
+
+{% if similar_listings %}
+	<section class="gray-simple">
+		<div class="container">
+			<h3>Similar Properties</h3>			
+			<div class="row">
+				{% for listing in similar_listings %}
+				<div class="col-lg-4 col-md-6 col-sm-12">
+
+					<div class="single-items">
+						<div class="property-listing shadow-none property-2 border">
+					
+							<div class="listing-img-wrapper">
+								<div class="list-img-slide">
+									{% if listing.listingpicture_set.all %}
+									<div class="click">
+										{% for pic in listing.listingpicture_set.all %}
+										<div>
+											<img src="{{ pic.picture.url }}" class="img-fluid mx-auto" width="1200px" height="800" alt="" />
+										</div>
+										{% endfor %} 
+									</div>
+									{% else %}
+										<img src="{% static 'assets/img/grid/no-image.jpg' %}" class="img-fluid mx-auto" alt="" /></a>
+									{% endif %}
+								</div>
+							</div>
+							
+							<div class="listing-detail-wrapper">
+								<div class="listing-short-detail">
+									<div class="listing-short-detail">
+										<h5 class="verified">
+											<!--<div class="checkmark"></div>-->
+											<a href="{{ listing.get_absolute_url }}" class="prt-link-detail">{{ listing.name }}</a>
+
+											{% if listing.status == 'sale' %}
+												<span class="prt-types sale">For {{ listing.status | title }}</span>
+											{% endif %}
+											{% if listing.status == 'rent' %}
+												<span class="prt-types rent">For {{ listing.status | title }}</span>
+											{% endif %}
+										</h5>
+									</div>
+									<div class="listing-short-detail-flex">
+										<h6 class="prt-price-fix">
+											&#8358;{% if listing.price < 1000000 %}
+												{{ listing.price|intcomma }}
+											{% else %}
+												{{ listing.price|intword }}
+											{% endif %}
+											{% if listing.status == 'rent' %}<sub>/year</sub>{% endif %}
+
+											<span class="badge badge-sm {% if listing.price_status == 'fixed' %} bg-danger {% else %} bg-success {% endif %}" style="color: whitesmoke;">
+												{{ listing.price_status|upper }}
+											</span>
+										</h6>
+									</div>
+								</div>
+							</div>
+							
+							<div class="price-features-wrapper">
+								<div class="list-fx-features">
+									{% if listing.listingspecification_set.all %}
+										{% for s in listing.listingspecification_set.all %}
+											{% if s.attribute.name == 'Bedroom' %}
+												<div class="listing-card-info-icon">
+													<div class="inc-fleat-icon"><img src="{% static 'assets/img/bed.svg' %}" width="13" alt="" /></div>{{ s.value }} Beds
+												</div>
+											{% endif %}
+											{% if s.attribute.name == 'Bathroom' %}
+												<div class="listing-card-info-icon">
+													<div class="inc-fleat-icon"><img src="{% static 'assets/img/bathtub.svg' %}" width="13" alt="" /></div>{{ s.value }} Bath
+												</div>
+											{% endif %}
+										{% endfor %}
+									{% endif %}
+									<div class="listing-card-info-icon">
+										<div class="inc-fleat-icon"><img src="{% static 'assets/img/move.svg' %}" width="13" alt="" /></div>{{ listing.get_sqft }} sqft
+									</div>
+								</div>
+							</div>
+							
+							<div class="listing-detail-footer">
+								<div class="footer-first">
+									<div class="foot-location"><img src="{% static 'assets/img/pin.svg' %}" width="18" alt="" />{{ listing.location }}, {{ listing.state }}.</div>
+								</div>
+								<div class="footer-flex">
+									<a href="{{ listing.get_absolute_url }}" class="prt-view">View</a>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					
+				</div>
+				{% endfor %}	
+			</div>
+		</div>
+	</section>
+{% endif %}
+
+{% endblock content %}

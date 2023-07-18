@@ -1,0 +1,62 @@
+{% extends 'back-base.html' %}
+{% load static %}
+
+{% block title %}Terms &amp; Conditions{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Terms &amp; Conditions</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Terms &amp; Conditions
+                    <a href="{% url 'pages:terms-create' %}" class="btn btn-success btn-sm ms-3">Add New Terms &amp; Conditions</a>
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.is_superuser or request.user.is_staff %}
+        <div class="row">
+            <div class="col-12">
+                {% include 'includes/alerts.html' %}
+                <div class="card">
+                    <div class="card-body">
+                        <table id="scroll-horizontal-datatable" class="table w-100 nowrap">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Term</th>
+                                    <th>Condition</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for term in terms %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td><a href="{% url 'pages:terms-edit' term.id %}"> {{ term.term | title }}</a></td>
+                                    <td>{{ term.condition|safe }}</td>
+                                    <td>{% if term.is_active %}
+                                            <span class="badge badge-success-lighten p-1 font-14">Active</span>
+                                        {% else %}
+                                            <span class="badge badge-warnig-lighten p-1 font-14">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>You currently do not have access to this page.</p>
+    {% endif %}
+
+{% endblock content %}

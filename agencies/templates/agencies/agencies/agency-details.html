@@ -1,0 +1,47 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} {{ agency.name }} {% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'agencies:agencies-list' %}">Agencies</a></li>
+                        <li class="breadcrumb-item active">{{ agency.name }}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{{ agency.name }}</h4>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.is_organisor or request.user.is_superuser or request.user.is_staff %}
+        <div class="row">
+            <div class="col-lg-12 col-md-6 col-xxl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Agency name: {{ agency.name }}</h4>
+                        <p>
+                            {% if request.user.is_organisor %}
+                                <a href="{% url 'agencies:agency-update' agency.slug %}" class="btn btn-btn-sm btn-primary">Edit</a>
+                            {% elif request.user.is_superuser or request.user.is_staff %}
+                                <a href="{% url 'agencies:admin-agency-update' agency.slug %}" class="btn btn-btn-sm btn-primary">Edit</a>
+                                <a href="{% url 'agencies:agency-delete' agency.pk %}" class="btn btn-btn-sm btn-danger">Delete</a>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+    {% endif %}
+
+{% endblock content %}

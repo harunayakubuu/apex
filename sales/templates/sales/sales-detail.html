@@ -1,0 +1,59 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Sale ID: {{ object.transaction_id }} {% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'sales:sales-list' %}">Sale List</a></li>
+                        <li class="breadcrumb-item active">Sale ID: {{ object.transaction_id }}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Sales ID: {{ object.transaction_id }}</h4>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            {% include 'includes/alerts.html' %}
+            <div class="card">
+                {% if request.user.is_superuser %}
+                    <div class="card-body">
+                        <h3>Sale ID {{ object.transaction_id }}</h3>
+                        <p>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    {{ object.}}<br>
+                                    Property: {{ object.position.listing.name }}<br>
+                                    Property Owner: {{ object.position.listing.listing_owner.user.get_full_name }}<br>
+                                    Price: {{ object.price }}<br>
+                                    Commission: {{ object.commission }}<br>
+                                    Total Price: {{ object.total_price }}<br>
+                                    Buyer: {{ object.buyer }}<br>
+                                    Transaction Date: {{ object.created|date }}<br>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <a href="{% url 'invoices:sale-pdf' sale.pk %}" class="btn btn-secondary">Generate Invoice</a>
+                                </div>
+                            </div>
+                        </p>
+                    </div>
+                {% else %}
+                    <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,95 @@
+{% extends 'back-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}My Contacts Form{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'contacts:emergency-contacts' %}">Contacts</a></li>
+                        <li class="breadcrumb-item active">My Contacts Form</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">My Contacts Form</h4>
+            </div>
+        </div>
+    </div>
+    
+    {% if request.user.emergencycontact_set.all.count < 4 %}
+        <div class="row">
+            <div class="col-12">
+                {% include 'includes/alerts.html' %}
+                <div class="card">
+                    <div class="card-body">
+
+                        <h3>My Contacts Form</h3>
+
+                        <form method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4">
+                                    <div class="mb-3">
+                                        {{ form.full_name|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4">
+                                    <div class="mb-3">
+                                        {{ form.relationship|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4">
+                                    <div class="mb-3">
+                                        {{ form.phone|as_crispy_field }}
+                                    </div>
+                                </div>
+                                    
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4">
+                                    <div class="mb-3">
+                                        {{ form.email|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4">
+                                    <div class="mb-3">
+                                        {{ form.address|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4">
+                                    <div class="mb-3">
+                                        {{ form.state|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4">
+                                    <div class="mb-3">
+                                        {{ form.comment|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4">
+                                    <div class="mb-3">
+                                        {{ form.picture|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4">
+                                    <div class="mb-3">
+                                        {{ form.next_of_kin|as_crispy_field }}
+                                    </div>
+                                </div>                        
+                            </div>
+                            <div class="row">
+                                <div class="mb-3">
+                                <input type="submit" value="Save" class="btn btn-success">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>You have reach the maximum number of contacts you can add.</p>
+        <p>You can edit or remove the existing contacts.</p>
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Register{% endblock title %}
+
+{% block content %}
+<!--
+<header class="header">
+    {# include 'includes/frontend/nav-bar.html' #}
+</header>-->
+	<div class="page-title">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					
+					<h2 class="ipt-title">Register</h2>
+					<span class="ipn-subtitle">Register as a client or as an agency</span>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<section>
+		<div class="container justify-content-center">
+
+			{% include 'includes/alerts.html' %}
+
+			{% if not request.user.is_authenticated %}
+				<div class="row justify-content-center mt-4">
+					<div class="col-lg-6 col-md-12 col-sm-12">
+						<a href="{% url 'client-signup' %}" class="btn btn-theme-light rounded full-width">Register as customer</a></br>
+					</div>
+					<div class="col-lg-6 col-md-12 col-sm-12">
+						<a href="{% url 'organisor-signup' %}" class="btn btn-theme-light-2 rounded full-width">Register as Agency</a>								
+					</div>
+				</div>
+			{% else %}
+				<p>
+					You are logged in already and cannot register. Would you like to <a href="{% url 'logout' %}">logout</a>?
+				</p>
+			{% endif %}
+		</div>
+	</section>
+{% endblock content %}

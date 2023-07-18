@@ -1,0 +1,43 @@
+{% extends 'back-base.html' %}
+{% load static %}
+
+{% block title %}Agency Delete{% endblock title %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'agencies:agencies-list' %}">Agencies</a></li>
+                    <li class="breadcrumb-item active">Confirm {{ object.name }} Delete</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Confirm {{ object.name }} Delete</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        {# include 'includes/alerts.html' #}
+        <div class="card">
+            <div class="card-body">
+                <h3>Confirm {{ object.name }} Delete</h3>
+                
+                <form method="post">{% csrf_token %}
+                    <p>Are you sure you want to delete this agency <strong>{{ object.name }}</strong>?</p>
+                    <p>
+                        If deleted, all agents and all properties associated to this agency shall also be deleted.<br>
+                    </p>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a href="{% url 'agencies:agencies-list' %}" class="btn btn-success">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

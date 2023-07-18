@@ -1,0 +1,32 @@
+{% load static %}
+{% load i18n %}
+
+<button  type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#warning-header-modal">Warning Header</button>
+<div id="warning-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="warning-header-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-warning">
+                <h4 class="modal-title" id="warning-header-modalLabel">{% trans "Sign Out" %}</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+
+            <form method="post" action="{% url 'account_logout' %}">
+            <div class="modal-body">
+                <p>{% trans 'Are you sure you want to sign out?' %}</p>
+
+                
+                    {% csrf_token %}
+                    {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                    {% endif %}
+                    <!-- <button type="submit"></button> -->
+                  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-warning">{% trans 'Sign Out' %}</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

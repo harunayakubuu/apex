@@ -1,0 +1,39 @@
+{% extends 'back-base.html' %}
+{% block title %}Invoices{% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:profile' %}">Profile</a></li>
+                        <li class="breadcrumb-item active">Sales List</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Sales List</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if request.user.is_superuser or request.user.is_staff %}
+                        {% for sale in object_list %}
+                            {{ sale.transaction_id }}
+                            <a href="{% url 'invoices:sale-pdf' sale.pk %}">PDF</a>
+                            <hr>
+                        {% endfor %}
+                    {% else %}
+                        <p>You currently do not have access to this page. Please <a href="{% url 'contacts:contact-form' %}">contact us</a> for further assistance.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
