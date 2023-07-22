@@ -12,7 +12,7 @@ SECRET_KEY = config('SECRET_KEY')
 # DEBUG = True
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['www.apexproperties.ng', 'apexproperties.ng', 'localhost', '127.0.0.1', 'web-production-8514d.up.railway.app']
+ALLOWED_HOSTS = ['www.apexproperties.ng', 'apexproperties.ng', 'localhost', '127.0.0.1', 'web-production-7b2f.up.railway.app']
 
 # Application definition
 INSTALLED_APPS = [
@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'sales',
 ]
 
-SITE_ID = 1
+SITE_ID = 2
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
