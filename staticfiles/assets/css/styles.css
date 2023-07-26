@@ -256,6 +256,7 @@ p {
 }
 p, ul, ol, dl, dt, dd, blockquote, address {
     margin: 0 0 10px;
+    color:#f0f2f7
 }
 .owl-carousel .item {
     padding: 0 15px;
@@ -10048,7 +10049,7 @@ footer.skin-light-footer .footer-widget ul li a, footer.skin-light-footer, foote
 	font-weight: 600;
 }
 footer.skin-dark-footer .footer-widget ul li a, footer.skin-dark-footer, footer.skin-dark-footer a {
-    color:#5a6980;
+    color:#f0f3ff;
     transition: all ease 0.4s;
     font-size: 14px;
 	font-weight: 600;
