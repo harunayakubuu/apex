@@ -246,7 +246,7 @@
                                 <tr class="mb-2">
                                     <td>{{ pic.name | title }}</td>
                                     <td>
-                                        <img src="{% if pic.is_featured %} {{ pic.picture.url }} {% else %}{% endif %}" width="200px" height="150px" alt="Featured Checkbox not checked">
+                                        <img src="{{ pic.picture.url }}" width="200px" height="150px" alt="Featured Checkbox not checked">
                                     </td>
                                 </tr>
                             {% endfor %}
