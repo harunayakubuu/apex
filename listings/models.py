@@ -210,8 +210,8 @@ class ListingPicture(models.Model):
 
 class ListingVideo(models.Model):
     listing = models.OneToOneField(Listing, on_delete=models.CASCADE)
-    video = models.FileField(upload_to = 'videos/properties/', blank=True, null=True,
-            validators = [validate_video_size])
+    video = models.FileField(upload_to = 'videos/properties/', blank=True, null=True)
+            #validators = [validate_video_size])
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     
