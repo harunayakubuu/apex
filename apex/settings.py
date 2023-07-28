@@ -214,7 +214,7 @@ MESSAGE_TAGS = {
 
 
 LOGIN_REDIRECT_URL = '/accounts/dashboard/'
-LOGIN_URL = 'login/'
+LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = '/'
 
 

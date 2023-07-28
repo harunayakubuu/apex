@@ -256,7 +256,6 @@ p {
 }
 p, ul, ol, dl, dt, dd, blockquote, address {
     margin: 0 0 10px;
-    color:#f0f2f7
 }
 .owl-carousel .item {
     padding: 0 15px;
@@ -7132,7 +7131,7 @@ ul.fr-grid-social li a{
 }
 .page-title {
     width: 100%;
-    height: 100px;
+    height: 200px;
     text-align: left;
     display: flex;
     flex-direction: column;
@@ -7865,7 +7864,7 @@ ul.like_share_list li a i{
 .property_block_wrap {
     display: block;
     width: 100%;
-    background: #ebebeb;
+    background: #ffffff;
     padding: 0;
     border-radius: 4px;
     margin-bottom: 30px;
@@ -9354,8 +9353,7 @@ h3.pa-name {
 
 .single-widgets {
     border:2px solid #e5e8f3;
-    /*padding: 30px 28px 35px;*/
-    padding: 20px 15px 20px 15px;
+    padding: 30px 28px 35px;
 	background:#ffffff;
     margin: 0 0 40px;
 	border-radius:6px;
@@ -10049,7 +10047,7 @@ footer.skin-light-footer .footer-widget ul li a, footer.skin-light-footer, foote
 	font-weight: 600;
 }
 footer.skin-dark-footer .footer-widget ul li a, footer.skin-dark-footer, footer.skin-dark-footer a {
-    color:#f0f3ff;
+    color:#5a6980;
     transition: all ease 0.4s;
     font-size: 14px;
 	font-weight: 600;
