@@ -23,47 +23,47 @@
 		<div class="container">
 			<div class="row">			
 				<div class="col-lg-7 col-md-7">
-				{% include 'includes/alerts.html' %}
-				<h2>Need assistance?</h2>
-				<p> Please complete the contact form</p>
-				<form method="post" novalidate>{% csrf_token %}
-					
-					<div class="row">
-						<div class="col-lg-6 col-md-6">
-							<div class="form-group">
-								{{ form.name|as_crispy_field }}
+					{% include 'includes/alerts.html' %}
+					<h2>Need assistance?</h2>
+					<p> Please complete the contact form</p>
+					<form method="post" novalidate>{% csrf_token %}
+						
+						<div class="row">
+							<div class="col-lg-6 col-md-6">
+								<div class="form-group">
+									{{ form.name|as_crispy_field }}
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6">
+								<div class="form-group">
+									{{ form.email|as_crispy_field }}
+								</div>
 							</div>
 						</div>
-						<div class="col-lg-6 col-md-6">
-							<div class="form-group">
-								{{ form.email|as_crispy_field }}
-							</div>
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-lg-6 col-md-6">
-							<div class="form-group">
-								{{ form.phone|as_crispy_field }}
-							</div>
-						</div>					
+						
+						<div class="row">
+							<div class="col-lg-6 col-md-6">
+								<div class="form-group">
+									{{ form.phone|as_crispy_field }}
+								</div>
+							</div>					
 
-						<div class="col-lg-6 col-md-6">
-							<div class="form-group">
-								{{ form.subject|as_crispy_field }}
+							<div class="col-lg-6 col-md-6">
+								<div class="form-group">
+									{{ form.subject|as_crispy_field }}
+								</div>
 							</div>
 						</div>
-					</div>
-					
-					<div class="form-group">
-						{{ form.message|as_crispy_field }}
-					</div>
-					
-					<div class="form-group">
-						<button class="btn btn-theme-light-2 rounded" type="submit">Submit</button>
-					</div>
-				</form>
-									
+						
+						<div class="form-group">
+							{{ form.message|as_crispy_field }}
+						</div>
+						
+						<div class="form-group">
+							<button class="btn btn-theme-light-2 rounded" type="submit">Submit</button>
+						</div>
+					</form>
+										
 				</div>
 				
 				<div class="col-lg-5 col-md-5">
@@ -75,18 +75,18 @@
 						{% for office in offices %}
               				{% if office.state == "Kano" %}
 						
-								<div class="cn-info-detail">
+								<div class="mb-3">
 									<div class="cn-info-icon">
 										<i class="ti-home"></i>
 									</div>
 									<div class="cn-info-content">
 										<h4 class="cn-info-title">Reach Us</h4>
-										{{ office.address }}, <br>{{ office.city }}, <br> {{ office.state|title }}.
+										{{ office.address }}, {{ office.city }}, {{ office.state|title }}.
 										
 									</div>
 								</div>
 								
-								<div class="cn-info-detail">
+								<div class="mb-3">
 									<div class="cn-info-icon">
 										<i class="ti-email"></i>
 									</div>
@@ -96,13 +96,13 @@
 									</div>
 								</div>
 								
-								<div class="cn-info-detail">
+								<div class="">
 									<div class="cn-info-icon">
 										<i class="ti-mobile"></i>
 									</div>
 									<div class="cn-info-content">
 										<h4 class="cn-info-title">Call Us</h4>
-										{{ office.phone }}<br>{{ office.phone }}
+										{{ office.phone }}, {{ office.phone }}
 									</div>
 								</div>
 							{% endif %}

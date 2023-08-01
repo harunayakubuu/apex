@@ -195,8 +195,8 @@ class ListingType(models.Model):
 class ListingPicture(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    picture = models.ImageField(upload_to = 'pictures/properties/', blank=True, null=True,
-            validators = [validate_picture_size, validate_picture_dimension])#, validate_picture_dimension(width=575, height=365)])
+    picture = models.ImageField(upload_to = 'pictures/properties/', blank=True, null=True)
+            #validators = [validate_picture_size, validate_picture_dimension])#, validate_picture_dimension(width=575, height=365)])
     is_feature = models.BooleanField("Featured", default=False)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
